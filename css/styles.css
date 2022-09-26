@@ -1,5 +1,6 @@
 body {
   color: #fff;
+  background-color: #424549;
   font-family: Roboto, sans-serif;
 }
 
@@ -13,4 +14,8 @@ header {
 h1 {
   font-weight: 700;
   margin: 1rem 0;
+}
+
+main {
+  margin-top: 70px;
 }

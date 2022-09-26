@@ -1,0 +1,11 @@
+.container {
+  padding: 0 0.5rem;
+}
+
+.row {
+  display: flex;
+}
+
+.col-100 {
+  flex-basis: 100%;
+}

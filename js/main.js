@@ -1,15 +1,27 @@
 var url = 'https://api.rawg.io/api/games?key=76e41dc99b8042e0b6f0cd116d9dadc1';
-var xhr = new XMLHttpRequest();
-xhr.open('GET', url);
-xhr.responseType = 'json';
-xhr.send();
+var nextPage = null;
+var $backButton = document.querySelector('.back-button');
+var $nextButton = document.querySelector('.next-button');
+var $pageNumberTop = document.querySelector('.page-number-top');
+var $pageNumberBot = document.querySelector('.page-number-bot');
+var pageNumber = 1;
 
-xhr.addEventListener('load', function (event) {
-  // console.log(xhr.status);
-  // console.log('xhr.response:', xhr.response);
+function getData(url) {
+  var xhr = new XMLHttpRequest();
 
-  renderCards(xhr.response.results);
-});
+  xhr.open('GET', url);
+  xhr.responseType = 'json';
+
+  xhr.addEventListener('load', function (event) {
+    // console.log(xhr.status);
+    // console.log('xhr.response:', xhr.response);
+
+    renderCards(xhr.response.results);
+    nextPage = xhr.response.next;
+  });
+
+  xhr.send();
+}
 
 function renderCards(array) {
   var $cardView = document.querySelector('.card-view');
@@ -55,12 +67,6 @@ function renderCards(array) {
   }
 }
 
-var $backButton = document.querySelector('.back-button');
-var $nextButton = document.querySelector('.next-button');
-var $pageNumberTop = document.querySelector('.page-number-top');
-var $pageNumberBot = document.querySelector('.page-number-bot');
-var pageNumber = 1;
-
 $backButton.addEventListener('click', function (event) {
   pageNumber--;
   $pageNumberTop.textContent = pageNumber;
@@ -72,8 +78,11 @@ $backButton.addEventListener('click', function (event) {
 });
 
 $nextButton.addEventListener('click', function (event) {
+  getData(nextPage);
   pageNumber++;
   $pageNumberTop.textContent = pageNumber;
   $pageNumberBot.textContent = pageNumber;
   $backButton.disabled = false;
 });
+
+getData(url);

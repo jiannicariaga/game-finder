@@ -14,6 +14,10 @@
   flex-basis: 50%;
 }
 
+.col-33 {
+  flex-basis: 33%;
+}
+
 .flex-align-center {
   align-items: center;
 }
@@ -26,11 +30,11 @@
   justify-content: space-between;
 }
 
-.text-align-center {
+.text-center {
   text-align: center;
 }
 
-.text-align-right {
+.text-right {
   text-align: right;
 }
 

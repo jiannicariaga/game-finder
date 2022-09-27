@@ -5,15 +5,14 @@ body {
 }
 
 header {
-  background-color: #5667a6;
   position: fixed;
   top: 0;
+  background-color: #5667a6;
   width: 100%;
 }
 
 h1 {
-  padding: 1rem 0;
-  margin: 0;
+  margin: 1rem 0;
 }
 
 main {
@@ -34,7 +33,6 @@ main {
 
 .card {
   background-color: #282b30;
-  height: 11.25rem;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 }
@@ -44,7 +42,7 @@ main {
   height: 90px;
 }
 
-.thumbnail img {
+.thumbnail > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -55,8 +53,44 @@ main {
   overflow: hidden;
 }
 
-.title h4 {
+.title > h4 {
   line-height: 2.25rem;
   padding-top: 0.5rem;
   margin: 0;
+}
+
+/* Tablet 768px */
+@media only screen and (min-width: 426px) {
+  .card-wrapper:nth-child(odd),
+  .card-wrapper:nth-child(even) {
+    padding: 0 0.25rem 0.5rem;
+  }
+
+  .card-wrapper:nth-child(4n+1) {
+    padding-left: 0;
+    padding-right: 0.25rem;
+  }
+
+  .card-wrapper:nth-child(4n) {
+    padding-left: 0.25rem;
+    padding-right: 0;
+  }
+}
+
+/* Laptop 1024px */
+@media only screen and (min-width: 769px) {
+  .card-wrapper:nth-child(4n+1),
+  .card-wrapper:nth-child(4n) {
+    padding: 0 0.25rem;
+  }
+
+  .card-wrapper:nth-child(5n+1) {
+    padding-left: 0;
+    padding-right: 0.25rem;
+  }
+
+  .card-wrapper:nth-child(5n) {
+    padding-left: 0.25rem;
+    padding-right: 0;
+  }
 }

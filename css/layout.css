@@ -21,3 +21,15 @@
 .text-align-right {
   text-align: right;
 }
+
+.flex-wrap-wrap {
+  flex-wrap: wrap;
+}
+
+.justify-content-space-between {
+  justify-content: space-between;
+}
+
+.text-align-center {
+  text-align: center;
+}

@@ -4,10 +4,17 @@ xhr.open('GET', url);
 xhr.responseType = 'json';
 xhr.send();
 
-function renderFeatured(event) {
+xhr.addEventListener('load', function (event) {
+  // console.log(xhr.status);
+  // console.log('xhr.response:', xhr.response);
+
+  renderCards(xhr.response.results);
+});
+
+function renderCards(array) {
   var $cardView = document.querySelector('.card-view');
 
-  for (var i = 0; i < xhr.response.results.length; i++) {
+  for (var i = 0; i < array.length; i++) {
     var cardWrapper = document.createElement('div');
     cardWrapper.className = 'card-wrapper col-50';
     $cardView.appendChild(cardWrapper);
@@ -29,8 +36,8 @@ function renderFeatured(event) {
     row1.appendChild(thumbnail);
 
     var img = document.createElement('img');
-    img.src = xhr.response.results[i].background_image;
-    img.alt = xhr.response.results[i].name;
+    img.src = array[i].background_image;
+    img.alt = array[i].name;
     thumbnail.appendChild(img);
 
     var row2 = document.createElement('div');
@@ -43,24 +50,30 @@ function renderFeatured(event) {
 
     var h4 = document.createElement('h4');
     h4.className = 'text-center';
-    h4.textContent = xhr.response.results[i].name;
+    h4.textContent = array[i].name;
     title.appendChild(h4);
   }
 }
 
-xhr.addEventListener('load', renderFeatured);
+var $backButton = document.querySelector('.back-button');
+var $nextButton = document.querySelector('.next-button');
+var $pageNumberTop = document.querySelector('.page-number-top');
+var $pageNumberBot = document.querySelector('.page-number-bot');
+var pageNumber = 1;
 
-// console.log(xhr.status);
-// console.log('xhr.response:', xhr.response);
-// console.log('.results:', xhr.response.results);
-// console.log('.next:', xhr.response.next);
+$backButton.addEventListener('click', function (event) {
+  pageNumber--;
+  $pageNumberTop.textContent = pageNumber;
+  $pageNumberBot.textContent = pageNumber;
 
-// function nextPage(event) {
-//   var $nextButton = document.querySelector('.next-button');
+  if (pageNumber === 1) {
+    $backButton.disabled = true;
+  }
+});
 
-// }
-
-// function backPage(event) {
-//   var $backButton = document.querySelector('.back-button');
-
-// }
+$nextButton.addEventListener('click', function (event) {
+  pageNumber++;
+  $pageNumberTop.textContent = pageNumber;
+  $pageNumberBot.textContent = pageNumber;
+  $backButton.disabled = false;
+});

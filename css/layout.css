@@ -1,0 +1,62 @@
+.container {
+  padding: 0 0.5rem;
+}
+
+.row {
+  display: flex;
+}
+
+.col-100 {
+  flex-basis: 100%;
+}
+
+.col-50 {
+  flex-basis: 50%;
+}
+
+.col-33 {
+  flex-basis: 33%;
+}
+
+.flex-align-center {
+  align-items: center;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-space-between {
+  justify-content: space-between;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+@media only screen and (min-width: 426px) {
+  .container {
+    width: 656px;
+    padding: 0 0.5rem;
+    margin: 0 auto;
+  }
+
+  .card-wrapper.col-50 {
+    flex-basis: 25%;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .container {
+    width: 768px;
+    margin: 0 auto;
+  }
+
+  .card-wrapper.col-50 {
+    flex-basis: 20%;
+  }
+}

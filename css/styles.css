@@ -16,6 +16,26 @@ h1 {
   cursor: pointer;
 }
 
+.back-link {
+  padding-top: 19.2px;
+}
+
+a {
+  color: #fff;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.icon {
+  padding-right: 0.25rem;
+}
+
+h3 {
+  margin: 0.75rem 0;
+}
+
 main {
   margin-top: 70px;
 }
@@ -36,40 +56,69 @@ main {
   padding-bottom: 0;
 }
 
-.card {
+.card-featured,
+.card-detail {
   background-color: #282b30;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.card-featured {
   transition: margin 0.2s ease-in-out;
 }
 
-.card:hover {
+.card-featured:hover {
   background-color: #1e2124;
   cursor: pointer;
   margin-top: -4px;
 }
 
-.thumbnail,
-.title {
+.card-thumbnail-featured,
+.card-title-featured {
   height: 90px;
 }
 
-.thumbnail > img {
+.card-thumbnail-detail {
+  height: 180px;
+}
+
+img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 10px 10px 0 0;
 }
 
-.title {
+.card-title-featured {
   overflow: hidden;
   padding: 0 0.25rem;
 }
 
-.title > h4 {
+.card-title-featured > h4 {
   line-height: 2.25rem;
   padding-top: 0.5rem;
   margin: 0;
+}
+
+p {
+  font-size: 0.9rem;
+  line-height: 1.75rem;
+  margin: 0;
+}
+
+hr {
+  margin: 1rem 0 0.25rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0;
+}
+
+li {
+  font-size: 0.9rem;
+  line-height: 1.75rem;
 }
 
 .back-button,
@@ -128,5 +177,9 @@ main {
 
   .card-wrapper:nth-last-child(-n+5) {
     padding-bottom: 0;
+  }
+
+  .meta-data {
+    text-align: center;
   }
 }

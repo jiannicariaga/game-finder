@@ -32,27 +32,90 @@
           <p class="text-right">Page <span class="page-number-top">1</span></p>
         </div>
       </div>
-    </section>
-    <section class="container">
-      <div class="card-view row flex-wrap flex-space-between"></div>
-    </section>
-  </main>
-  <footer>
-    <section class="container">
-      <div class="row flex-space-between flex-align-center">
-        <div class="col-33">
-          <button class="back-button" hidden>Back</button>
-        </div>
-        <div class="col-33 text-center">
-          <h2 class="page-number-bot">1</h2>
-        </div>
-        <div class="col-33 text-right">
-          <button class="next-button">Next</button>
+      <div class="cards row flex-wrap flex-space-between"></div>
+      <div class="container">
+        <div class="row flex-space-between flex-align-center">
+          <div class="col-33">
+            <button class="back-button" hidden>Back</button>
+          </div>
+          <div class="col-33 text-center">
+            <h2 class="page-number-bot">1</h2>
+          </div>
+          <div class="col-33 text-right">
+            <button class="next-button">Next</button>
+          </div>
         </div>
       </div>
     </section>
-  </footer>
+    <section class="container" data-view="detail" hidden>
+      <div class="row">
+        <div class="col-100">
+          <div class="row back-link flex-align-center">
+            <div class="col-100">
+              <a href="#"><span class="icon fas fa-angle-left"></span>Back</a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-100">
+              <h2 class="title"></h2>
+            </div>
+          </div>
+          <div class="card-detail row">
+            <div class="col-100">
+              <div class="row">
+                <div class="card-thumbnail-detail col-100">
+                  <img class="thumbnail-detail" src="" alt="">
+                </div>
+              </div>
+              <div class="container">
+                <div class="row">
+                  <div class="col-100">
+                    <h3>About</h3>
+                    <p class="about"></p>
+                    <hr>
+                  </div>
+                </div>
+                <div class="meta-data row flex-wrap">
+                  <div class="col-50">
+                    <h3>Genre</h3>
+                    <ul class="genre"></ul>
+                  </div>
+                  <div class="col-50">
+                    <h3>Release Date</h3>
+                    <ul>
+                      <li class="release-date"></li>
+                    </ul>
+                  </div>
+                  <div class="col-50">
+                    <h3>Developer</h3>
+                    <ul class="developer"></ul>
+                  </div>
+                  <div class="col-50">
+                    <h3>Publisher</h3>
+                    <ul class="publisher"></ul>
+                  </div>
+                  <div class="col-50">
+                    <h3>ESRB Rating</h3>
+                    <ul>
+                      <li class="esrb-rating"></li>
+                    </ul>
+                  </div>
+                  <div class="col-50">
+                    <h3>Website</h3>
+                    <ul>
+                      <li><a class="website" href="" target="_blank">Link</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>
+  <script src="https://kit.fontawesome.com/94fa55cf7c.js" crossorigin="anonymous"></script>
 </body>
 </html>

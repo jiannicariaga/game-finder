@@ -2,7 +2,7 @@
 
 var data = {
   view: 'featured',
-  pages: [],
+  pageContent: [],
   currentPage: 1
 };
 var previousGameDataJSON = localStorage.getItem('game-data');

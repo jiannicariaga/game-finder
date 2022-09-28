@@ -1,5 +1,5 @@
-var url = 'https://api.rawg.io/api/games?key=76e41dc99b8042e0b6f0cd116d9dadc1';
-var nextPage = null;
+var url = 'https://api.rawg.io/api/games?key=76e41dc99b8042e0b6f0cd116d9dadc1&page=1';
+var newUrl = null;
 var $backButton = document.querySelector('.back-button');
 var $nextButton = document.querySelector('.next-button');
 var $pageNumberTop = document.querySelector('.page-number-top');
@@ -9,7 +9,7 @@ var pageNumber = 1;
 function getData(url) {
   var xhr = new XMLHttpRequest();
 
-  xhr.open('GET', url);
+  xhr.open('GET', url.slice(0, -1) + pageNumber.toString());
   xhr.responseType = 'json';
 
   xhr.addEventListener('load', function (event) {
@@ -17,7 +17,7 @@ function getData(url) {
     // console.log('xhr.response:', xhr.response);
 
     renderCards(xhr.response.results);
-    nextPage = xhr.response.next;
+    newUrl = xhr.response.next;
   });
 
   xhr.send();
@@ -75,14 +75,19 @@ $backButton.addEventListener('click', function (event) {
   if (pageNumber === 1) {
     $backButton.disabled = true;
   }
+
+  // console.log('Back button clicked.');
+  getData(newUrl);
 });
 
 $nextButton.addEventListener('click', function (event) {
-  getData(nextPage);
   pageNumber++;
   $pageNumberTop.textContent = pageNumber;
   $pageNumberBot.textContent = pageNumber;
   $backButton.disabled = false;
+
+  // console.log('Next button clicked.');
+  getData(newUrl);
 });
 
 getData(url);

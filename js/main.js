@@ -1,4 +1,6 @@
-var url = 'https://api.rawg.io/api/games?key=76e41dc99b8042e0b6f0cd116d9dadc1&page=1';
+var url = 'https://api.rawg.io/api/games';
+var key = '?key=76e41dc99b8042e0b6f0cd116d9dadc1';
+var pageParameter = '&page=';
 var newUrl = null;
 var $backLink = document.querySelector('a');
 var $featuredView = document.querySelector('[data-view="featured"]');
@@ -12,7 +14,7 @@ var pageNumber = 1;
 
 function getData(url) {
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', url.slice(0, -1) + pageNumber.toString());
+  xhr.open('GET', url + key + pageParameter + pageNumber.toString());
   xhr.responseType = 'json';
 
   xhr.addEventListener('load', function (event) {
@@ -33,6 +35,7 @@ function renderCards(array) {
 
     var card = document.createElement('div');
     card.className = 'card-featured row';
+    card.setAttribute('data-url', url + '/' + array[i].slug + key);
     cardWrapper.appendChild(card);
 
     var column1 = document.createElement('div');

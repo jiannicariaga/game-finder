@@ -1,9 +1,7 @@
 /* exported data */
 
 var data = {
-  view: 'featured',
-  pageContent: [],
-  currentPage: 1
+  view: 'featured'
 };
 var previousGameDataJSON = localStorage.getItem('game-data');
 

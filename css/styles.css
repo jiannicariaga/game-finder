@@ -81,7 +81,6 @@ main {
   cursor: pointer;
 }
 
-/* Tablet 768px */
 @media only screen and (min-width: 426px) {
   .card-wrapper:nth-child(odd),
   .card-wrapper:nth-child(even) {
@@ -103,7 +102,6 @@ main {
   }
 }
 
-/* Laptop 1024px */
 @media only screen and (min-width: 769px) {
   .card-wrapper:nth-child(4n+1),
   .card-wrapper:nth-child(4n) {

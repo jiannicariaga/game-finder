@@ -101,6 +101,7 @@ img {
 }
 
 p {
+  font-size: 0.9rem;
   line-height: 1.75rem;
   margin: 0;
 }
@@ -176,5 +177,9 @@ li {
 
   .card-wrapper:nth-last-child(-n+5) {
     padding-bottom: 0;
+  }
+
+  .meta-data {
+    text-align: center;
   }
 }

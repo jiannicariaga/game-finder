@@ -16,7 +16,7 @@ h1 {
   cursor: pointer;
 }
 
-.link-padding {
+.back-link {
   padding-top: 19.2px;
 }
 
@@ -104,6 +104,33 @@ main {
 .back-button:hover,
 .next-button:hover {
   cursor: pointer;
+}
+
+[data-view="detail"] .thumbnail {
+  height: 180px;
+}
+
+[data-view="detail"] h3 {
+  margin: 0.75rem 0;
+}
+
+[data-view="detail"] p {
+  line-height: 1.75rem;
+  margin: 0;
+}
+
+[data-view="detail"] hr {
+  margin: 1rem 0 0.25rem;
+}
+
+[data-view="detail"] ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0;
+}
+
+[data-view="detail"] li {
+  line-height: 1.75rem;
 }
 
 @media only screen and (min-width: 426px) {

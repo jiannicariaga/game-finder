@@ -1,11 +1,11 @@
 var url = 'https://api.rawg.io/api/games';
 var key = '?key=76e41dc99b8042e0b6f0cd116d9dadc1';
-var pageParameter = '&page=';
+var pageParam = '&page=';
 var newUrl = null;
 var $backLink = document.querySelector('a');
 var $featuredView = document.querySelector('[data-view="featured"]');
 var $detailView = document.querySelector('[data-view="detail"]');
-var $cardView = document.querySelector('.cards');
+var $cards = document.querySelector('.cards');
 var $backButton = document.querySelector('.back-button');
 var $nextButton = document.querySelector('.next-button');
 var $pageNumberTop = document.querySelector('.page-number-top');
@@ -14,7 +14,7 @@ var pageNumber = 1;
 
 function getData(url) {
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', url + key + pageParameter + pageNumber.toString());
+  xhr.open('GET', url + key + pageParam + pageNumber.toString());
   xhr.responseType = 'json';
 
   xhr.addEventListener('load', function (event) {
@@ -26,12 +26,12 @@ function getData(url) {
 }
 
 function renderCards(array) {
-  $cardView.replaceChildren();
+  $cards.replaceChildren();
 
   for (var i = 0; i < array.length; i++) {
     var cardWrapper = document.createElement('div');
     cardWrapper.className = 'card-wrapper col-50';
-    $cardView.appendChild(cardWrapper);
+    $cards.appendChild(cardWrapper);
 
     var card = document.createElement('div');
     card.className = 'card-featured row';
@@ -70,8 +70,18 @@ function renderCards(array) {
   }
 }
 
+$cards.addEventListener('click', function (event) {
+  if (event.target.closest('.card-featured')) {
+    getData(event.target.closest('.card-featured').getAttribute('data-url'));
+
+    data.view = 'detail';
+    $featuredView.hidden = true;
+    $detailView.hidden = false;
+  }
+});
+
 $backLink.addEventListener('click', function (event) {
-  data.view = 'detail';
+  data.view = 'featured';
   $featuredView.hidden = false;
   $detailView.hidden = true;
 });

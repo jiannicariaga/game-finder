@@ -1,6 +1,9 @@
 var url = 'https://api.rawg.io/api/games?key=76e41dc99b8042e0b6f0cd116d9dadc1&page=1';
 var newUrl = null;
-var $cardView = document.querySelector('.card-view');
+var $backLink = document.querySelector('a');
+var $featuredView = document.querySelector('[data-view="featured"]');
+var $detailView = document.querySelector('[data-view="detail"]');
+var $cardView = document.querySelector('.cards');
 var $backButton = document.querySelector('.back-button');
 var $nextButton = document.querySelector('.next-button');
 var $pageNumberTop = document.querySelector('.page-number-top');
@@ -63,6 +66,12 @@ function renderCards(array) {
     title.appendChild(h4);
   }
 }
+
+$backLink.addEventListener('click', function (event) {
+  data.view = 'detail';
+  $featuredView.hidden = false;
+  $detailView.hidden = true;
+});
 
 $backButton.addEventListener('click', function (event) {
   pageNumber--;

@@ -1,7 +1,8 @@
-var url = 'https://api.rawg.io/api/games';
+var domain = 'https://api.rawg.io/api/games';
 var key = '?key=76e41dc99b8042e0b6f0cd116d9dadc1';
 var pageParam = '&page=';
-var newUrl = null;
+var pageUrl = null;
+var gameUrl = null;
 var $backLink = document.querySelector('a');
 var $featuredView = document.querySelector('[data-view="featured"]');
 var $detailView = document.querySelector('[data-view="detail"]');
@@ -11,15 +12,26 @@ var $nextButton = document.querySelector('.next-button');
 var $pageNumberTop = document.querySelector('.page-number-top');
 var $pageNumberBot = document.querySelector('.page-number-bot');
 var pageNumber = 1;
+data.view = 'featured'; // Temp
 
 function getData(url) {
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', url + key + pageParam + pageNumber.toString());
+
+  if (data.view === 'featured') {
+    xhr.open('GET', domain + key + pageParam + pageNumber.toString());
+  } else if (data.view === 'detail') {
+    xhr.open('GET', url);
+  }
+
   xhr.responseType = 'json';
 
   xhr.addEventListener('load', function (event) {
-    renderCards(xhr.response.results);
-    newUrl = xhr.response.next;
+    if (data.view === 'featured') {
+      renderCards(xhr.response.results);
+      pageUrl = xhr.response.next;
+    } else if (data.view === 'detail') {
+      // fillDetail(xhr.response);
+    }
   });
 
   xhr.send();
@@ -35,7 +47,7 @@ function renderCards(array) {
 
     var card = document.createElement('div');
     card.className = 'card-featured row';
-    card.setAttribute('data-url', url + '/' + array[i].slug + key);
+    card.setAttribute('data-url', domain + '/' + array[i].slug + key);
     cardWrapper.appendChild(card);
 
     var column1 = document.createElement('div');
@@ -70,13 +82,18 @@ function renderCards(array) {
   }
 }
 
+// function fillDetail(object) {
+
+// }
+
 $cards.addEventListener('click', function (event) {
   if (event.target.closest('.card-featured')) {
-    getData(event.target.closest('.card-featured').getAttribute('data-url'));
-
+    gameUrl = event.target.closest('.card-featured').getAttribute('data-url');
     data.view = 'detail';
     $featuredView.hidden = true;
     $detailView.hidden = false;
+
+    getData(gameUrl);
   }
 });
 
@@ -97,7 +114,7 @@ $backButton.addEventListener('click', function (event) {
     $backButton.hidden = true;
   }
 
-  getData(newUrl);
+  getData(pageUrl);
 });
 
 $nextButton.addEventListener('click', function (event) {
@@ -107,11 +124,11 @@ $nextButton.addEventListener('click', function (event) {
   $backButton.hidden = false;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  if (newUrl === null) {
+  if (pageUrl === null) {
     $nextButton.hidden = true;
   }
 
-  getData(newUrl);
+  getData(pageUrl);
 });
 
-getData(url);
+getData(domain);

@@ -22,7 +22,6 @@ h1 {
 
 a {
   color: #fff;
-  cursor: pointer;
 }
 
 a:hover {
@@ -31,6 +30,10 @@ a:hover {
 
 .icon {
   padding-right: 0.25rem;
+}
+
+h3 {
+  margin: 0.75rem 0;
 }
 
 main {
@@ -53,40 +56,68 @@ main {
   padding-bottom: 0;
 }
 
-.card {
+.card-featured,
+.card-detail {
   background-color: #282b30;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.card-featured {
   transition: margin 0.2s ease-in-out;
 }
 
-.card:hover {
+.card-featured:hover {
   background-color: #1e2124;
   cursor: pointer;
   margin-top: -4px;
 }
 
-.thumbnail,
-.card-title {
+.card-thumbnail-featured,
+.card-title-featured {
   height: 90px;
 }
 
-.thumbnail > img {
+.card-thumbnail-detail {
+  height: 180px;
+}
+
+img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 10px 10px 0 0;
 }
 
-.card-title {
+.card-title-featured {
   overflow: hidden;
   padding: 0 0.25rem;
 }
 
-.card-title > h4 {
+.card-title-featured > h4 {
   line-height: 2.25rem;
   padding-top: 0.5rem;
   margin: 0;
+}
+
+p {
+  line-height: 1.75rem;
+  margin: 0;
+}
+
+hr {
+  margin: 1rem 0 0.25rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0;
+}
+
+li {
+  font-size: 0.9rem;
+  line-height: 1.75rem;
 }
 
 .back-button,
@@ -104,33 +135,6 @@ main {
 .back-button:hover,
 .next-button:hover {
   cursor: pointer;
-}
-
-[data-view="detail"] .thumbnail {
-  height: 180px;
-}
-
-[data-view="detail"] h3 {
-  margin: 0.75rem 0;
-}
-
-[data-view="detail"] p {
-  line-height: 1.75rem;
-  margin: 0;
-}
-
-[data-view="detail"] hr {
-  margin: 1rem 0 0.25rem;
-}
-
-[data-view="detail"] ul {
-  list-style: none;
-  padding: 0;
-  margin: 0.75rem 0;
-}
-
-[data-view="detail"] li {
-  line-height: 1.75rem;
 }
 
 @media only screen and (min-width: 426px) {

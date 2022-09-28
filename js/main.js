@@ -32,7 +32,7 @@ function renderCards(array) {
     $cardView.appendChild(cardWrapper);
 
     var card = document.createElement('div');
-    card.className = 'card row';
+    card.className = 'card-featured row';
     cardWrapper.appendChild(card);
 
     var column1 = document.createElement('div');
@@ -44,7 +44,7 @@ function renderCards(array) {
     column1.appendChild(row1);
 
     var thumbnail = document.createElement('div');
-    thumbnail.className = 'thumbnail col-100';
+    thumbnail.className = 'card-thumbnail-featured col-100';
     row1.appendChild(thumbnail);
 
     var img = document.createElement('img');
@@ -57,7 +57,7 @@ function renderCards(array) {
     column1.appendChild(row2);
 
     var title = document.createElement('div');
-    title.className = 'card-title col-100';
+    title.className = 'card-title-featured col-100';
     row2.appendChild(title);
 
     var h4 = document.createElement('h4');

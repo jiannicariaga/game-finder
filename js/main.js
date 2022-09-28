@@ -69,6 +69,7 @@ $backButton.addEventListener('click', function (event) {
   $pageNumberTop.textContent = pageNumber;
   $pageNumberBot.textContent = pageNumber;
   $nextButton.hidden = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 
   if (pageNumber === 1) {
     $backButton.hidden = true;
@@ -82,6 +83,7 @@ $nextButton.addEventListener('click', function (event) {
   $pageNumberTop.textContent = pageNumber;
   $pageNumberBot.textContent = pageNumber;
   $backButton.hidden = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 
   if (newUrl === null) {
     $nextButton.hidden = true;

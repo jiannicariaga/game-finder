@@ -54,7 +54,7 @@ function renderCards(array) {
     column1.appendChild(row2);
 
     var title = document.createElement('div');
-    title.className = 'title col-100';
+    title.className = 'card-title col-100';
     row2.appendChild(title);
 
     var h4 = document.createElement('h4');

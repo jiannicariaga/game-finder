@@ -174,7 +174,7 @@ li {
 
 .modal {
   position: fixed;
-  top: 140px;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
@@ -193,6 +193,21 @@ input {
 
 input:focus {
   outline: none;
+}
+
+.results {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 0 1rem;
+  margin-top: 35px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.results-list a {
+  color: #5667a6;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 @media only screen and (min-width: 426px) {

@@ -6,6 +6,7 @@ var pageUrl = null;
 var $featuredView = document.querySelector('[data-view="featured"]');
 var $detailView = document.querySelector('[data-view="detail"]');
 var $searchView = document.querySelector('[data-view="search"]');
+var $resultsView = document.querySelector('[data-view="results"]');
 var $cards = document.querySelector('.cards');
 var $searchIcon = document.querySelector('.search-icon');
 var $backLink = document.querySelector('.back-link');
@@ -26,9 +27,7 @@ function getData(url) {
 
   if (view === 'featured') {
     xhr.open('GET', domain + key + pageParam + pageNumber.toString());
-  } else if (view === 'detail') {
-    xhr.open('GET', url);
-  } else if (view === 'search') {
+  } else if (view === 'detail' || view === 'search') {
     xhr.open('GET', url);
   }
 
@@ -41,7 +40,7 @@ function getData(url) {
     } else if (view === 'detail') {
       fillDetail(xhr.response);
     } else if (view === 'search') {
-      // console.log(xhr.response);
+      renderResults(xhr.response.results);
       timeoutId = null;
     }
   });
@@ -97,6 +96,42 @@ function renderCards(array) {
   }
 }
 
+$cards.addEventListener('click', function (event) {
+  if (event.target.closest('.card-featured')) {
+    view = 'detail';
+    $featuredView.hidden = true;
+    $detailView.hidden = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    getData(event.target.closest('.card-featured').getAttribute('data-url'));
+  }
+});
+
+$backButton.addEventListener('click', function (event) {
+  pageNumber--;
+  $pageNumberTop.textContent = pageNumber;
+  $pageNumberBot.textContent = pageNumber;
+  $nextButton.hidden = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  getData(pageUrl);
+
+  if (pageNumber === 1) {
+    $backButton.hidden = true;
+  }
+});
+
+$nextButton.addEventListener('click', function (event) {
+  pageNumber++;
+  $pageNumberTop.textContent = pageNumber;
+  $pageNumberBot.textContent = pageNumber;
+  $backButton.hidden = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  getData(pageUrl);
+
+  if (pageUrl === null) {
+    $nextButton.hidden = true;
+  }
+});
+
 function fillDetail(object) {
   var $title = document.querySelector('.title');
   var $thumbnail = document.querySelector('.thumbnail-detail');
@@ -131,16 +166,6 @@ function addListElements(parentElement, array) {
   }
 }
 
-$cards.addEventListener('click', function (event) {
-  if (event.target.closest('.card-featured')) {
-    view = 'detail';
-    $featuredView.hidden = true;
-    $detailView.hidden = false;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    getData(event.target.closest('.card-featured').getAttribute('data-url'));
-  }
-});
-
 $backLink.addEventListener('click', function (event) {
   view = 'featured';
   $featuredView.hidden = false;
@@ -151,32 +176,6 @@ $topLink.addEventListener('click', function (event) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-$backButton.addEventListener('click', function (event) {
-  pageNumber--;
-  $pageNumberTop.textContent = pageNumber;
-  $pageNumberBot.textContent = pageNumber;
-  $nextButton.hidden = false;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  getData(pageUrl);
-
-  if (pageNumber === 1) {
-    $backButton.hidden = true;
-  }
-});
-
-$nextButton.addEventListener('click', function (event) {
-  pageNumber++;
-  $pageNumberTop.textContent = pageNumber;
-  $pageNumberBot.textContent = pageNumber;
-  $backButton.hidden = false;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  getData(pageUrl);
-
-  if (pageUrl === null) {
-    $nextButton.hidden = true;
-  }
-});
-
 function toggleModal(event) {
   if (view !== 'search') {
     $searchView.hidden = false;
@@ -185,6 +184,24 @@ function toggleModal(event) {
   } else {
     $searchView.hidden = true;
     view = previousView;
+    $searchInput.value = null;
+  }
+
+  $resultsView.hidden = true;
+}
+
+function renderResults(array) {
+  var $resultsList = document.querySelector('.results-list');
+  $resultsList.replaceChildren();
+
+  for (var i = 0; i < 10; i++) {
+    $resultsList.appendChild(
+      generateDomTree('li', {},
+        [generateDomTree('a', {
+          href: '',
+          'data-url': domain + '/' + array[i].slug + key,
+          textContent: array[i].name
+        })]));
   }
 }
 
@@ -193,11 +210,12 @@ $closeButton.addEventListener('click', toggleModal);
 
 $searchInput.addEventListener('keyup', function (event) {
   var searchUrl = domain + key + searchParam + $searchInput.value;
+  $resultsView.hidden = false;
 
   if (event && timeoutId !== null) {
     clearTimeout(timeoutId);
   } else {
-    timeoutId = setTimeout(getData(searchUrl), 1000);
+    timeoutId = setTimeout(getData(searchUrl), 500);
   }
 });
 

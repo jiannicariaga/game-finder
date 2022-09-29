@@ -17,6 +17,7 @@ var $closeButton = document.querySelector('.close-button');
 var $pageNumberTop = document.querySelector('.page-number-top');
 var $pageNumberBot = document.querySelector('.page-number-bot');
 var $searchInput = document.querySelector('input');
+var $resultsList = document.querySelector('.results-list');
 var previousView = null;
 var view = 'featured';
 var pageNumber = 1;
@@ -135,14 +136,18 @@ function toggleModal(event) {
     $searchInput.value = null;
   }
 
+  $resultsList.replaceChildren();
   $resultsView.hidden = true;
 }
 
 function renderResults(array) {
-  var $resultsList = document.querySelector('.results-list');
   $resultsList.replaceChildren();
 
-  for (var i = 0; i < 10; i++) {
+  for (var i = 0; i < array.length; i++) {
+    if (i === 10) {
+      return;
+    }
+
     $resultsList.appendChild(
       generateDomTree('li', {},
         [generateDomTree('a', {

@@ -2,11 +2,10 @@ var domain = 'https://api.rawg.io/api/games';
 var key = '?key=76e41dc99b8042e0b6f0cd116d9dadc1';
 var pageParam = '&page=';
 var pageUrl = null;
-var gameUrl = null;
-var $backLink = document.querySelector('a');
 var $featuredView = document.querySelector('[data-view="featured"]');
 var $detailView = document.querySelector('[data-view="detail"]');
 var $cards = document.querySelector('.cards');
+var $backLink = document.querySelector('a');
 var $backButton = document.querySelector('.back-button');
 var $nextButton = document.querySelector('.next-button');
 var $pageNumberTop = document.querySelector('.page-number-top');
@@ -37,48 +36,51 @@ function getData(url) {
   xhr.send();
 }
 
+function generateDomTree(tagName, attributes, children) {
+  var $element = document.createElement(tagName);
+
+  if (!children) {
+    children = [];
+  }
+
+  for (var key in attributes) {
+    if (key === 'textContent') {
+      $element.textContent = attributes.textContent;
+    } else {
+      $element.setAttribute(key, attributes[key]);
+    }
+  }
+
+  for (var i = 0; i < children.length; i++) {
+    $element.append(children[i]);
+  }
+
+  return $element;
+}
+
 function renderCards(array) {
   $cards.replaceChildren();
 
   for (var i = 0; i < array.length; i++) {
-    var cardWrapper = document.createElement('div');
-    cardWrapper.className = 'card-wrapper col-50';
-    $cards.appendChild(cardWrapper);
-
-    var card = document.createElement('div');
-    card.className = 'card-featured row';
-    card.setAttribute('data-url', domain + '/' + array[i].slug + key);
-    cardWrapper.appendChild(card);
-
-    var column1 = document.createElement('div');
-    column1.className = 'col-100';
-    card.appendChild(column1);
-
-    var row1 = document.createElement('div');
-    row1.className = 'row';
-    column1.appendChild(row1);
-
-    var thumbnail = document.createElement('div');
-    thumbnail.className = 'card-thumbnail-featured col-100';
-    row1.appendChild(thumbnail);
-
-    var img = document.createElement('img');
-    img.src = array[i].background_image;
-    img.alt = array[i].name;
-    thumbnail.appendChild(img);
-
-    var row2 = document.createElement('div');
-    row2.className = 'row';
-    column1.appendChild(row2);
-
-    var title = document.createElement('div');
-    title.className = 'card-title-featured col-100';
-    row2.appendChild(title);
-
-    var h4 = document.createElement('h4');
-    h4.className = 'text-center';
-    h4.textContent = array[i].name;
-    title.appendChild(h4);
+    $cards.appendChild(
+      generateDomTree('div', { class: 'card-wrapper col-50' },
+        [generateDomTree('div', {
+          class: 'card-featured row',
+          'data-url': domain + '/' + array[i].slug + key
+        },
+        [generateDomTree('div', { class: 'col-100' },
+          [generateDomTree('div', { class: 'row' },
+            [generateDomTree('div', { class: 'card-thumbnail-featured col-100' },
+              [generateDomTree('img', {
+                src: array[i].background_image,
+                alt: array[i].name
+              })])]),
+          generateDomTree('div', { class: 'row' },
+            [generateDomTree('div', { class: 'card-title-featured col-100' },
+              [generateDomTree('h4', {
+                class: 'text-center',
+                textContent: array[i].name
+              })])])])])]));
   }
 }
 
@@ -93,48 +95,36 @@ function fillDetail(object) {
   var $esrbRating = document.querySelector('.esrb-rating');
   var $website = document.querySelector('.website');
 
-  $genre.replaceChildren();
-  $developer.replaceChildren();
-  $publisher.replaceChildren();
-
   $title.textContent = object.name;
   $thumbnail.src = object.background_image;
   $thumbnail.alt = object.name;
   $about.textContent = object.description_raw;
-
-  for (var i = 0; i < object.genres.length; i++) {
-    var el1 = document.createElement('li');
-    el1.textContent = object.genres[i].name;
-    $genre.appendChild(el1);
-  }
-
+  $genre.replaceChildren();
   $releaseDate.textContent = object.released;
-
-  for (var j = 0; j < object.developers.length; j++) {
-    var el2 = document.createElement('li');
-    el2.textContent = object.developers[j].name;
-    $developer.appendChild(el2);
-  }
-
-  for (var k = 0; k < object.publishers.length; k++) {
-    var el3 = document.createElement('li');
-    el3.textContent = object.publishers[k].name;
-    $publisher.appendChild(el3);
-  }
-
+  $developer.replaceChildren();
+  $publisher.replaceChildren();
   $esrbRating.textContent = object.esrb_rating.name;
   $website.href = object.website;
+  addListElements($genre, object.genres);
+  addListElements($developer, object.developers);
+  addListElements($publisher, object.publishers);
+}
+
+function addListElements(parentElement, array) {
+  for (var i = 0; i < array.length; i++) {
+    var child = document.createElement('li');
+    child.textContent = array[i].name;
+    parentElement.appendChild(child);
+  }
 }
 
 $cards.addEventListener('click', function (event) {
   if (event.target.closest('.card-featured')) {
-    gameUrl = event.target.closest('.card-featured').getAttribute('data-url');
     view = 'detail';
     $featuredView.hidden = true;
     $detailView.hidden = false;
     window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    getData(gameUrl);
+    getData(event.target.closest('.card-featured').getAttribute('data-url'));
   }
 });
 
@@ -150,12 +140,11 @@ $backButton.addEventListener('click', function (event) {
   $pageNumberBot.textContent = pageNumber;
   $nextButton.hidden = false;
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  getData(pageUrl);
 
   if (pageNumber === 1) {
     $backButton.hidden = true;
   }
-
-  getData(pageUrl);
 });
 
 $nextButton.addEventListener('click', function (event) {
@@ -164,12 +153,11 @@ $nextButton.addEventListener('click', function (event) {
   $pageNumberBot.textContent = pageNumber;
   $backButton.hidden = false;
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  getData(pageUrl);
 
   if (pageUrl === null) {
     $nextButton.hidden = true;
   }
-
-  getData(pageUrl);
 });
 
-getData(domain);
+getData();

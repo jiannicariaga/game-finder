@@ -38,20 +38,12 @@
   justify-content: space-between;
 }
 
-.flex-justify-center {
-  justify-content: center;
-}
-
 .text-center {
   text-align: center;
 }
 
 .text-right {
   text-align: right;
-}
-
-.link-padding {
-  padding-top: 19.2px;
 }
 
 @media only screen and (min-width: 426px) {

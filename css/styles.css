@@ -162,6 +162,14 @@ li {
   cursor: pointer;
 }
 
+.link-back-padding {
+  padding-top: 19.2px;
+}
+
+.link-top-padding {
+  padding-top: 19.2px;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;

@@ -24,13 +24,7 @@ var timeoutId = null;
 
 function getData(url) {
   var xhr = new XMLHttpRequest();
-
-  if (view === 'featured') {
-    xhr.open('GET', domain + key + pageParam + pageNumber.toString());
-  } else if (view === 'detail' || view === 'search') {
-    xhr.open('GET', url);
-  }
-
+  xhr.open('GET', url);
   xhr.responseType = 'json';
 
   xhr.addEventListener('load', function (event) {
@@ -96,6 +90,69 @@ function renderCards(array) {
   }
 }
 
+function fillDetail(object) {
+  var $title = document.querySelector('.title');
+  var $thumbnail = document.querySelector('.thumbnail-detail');
+  var $about = document.querySelector('.about');
+  var $genre = document.querySelector('.genre');
+  var $releaseDate = document.querySelector('.release-date');
+  var $developer = document.querySelector('.developer');
+  var $publisher = document.querySelector('.publisher');
+  var $esrbRating = document.querySelector('.esrb-rating');
+  var $website = document.querySelector('.website');
+
+  $title.textContent = object.name;
+  $thumbnail.src = object.background_image;
+  $thumbnail.alt = object.name;
+  $about.textContent = object.description_raw;
+  $genre.replaceChildren();
+  addListElements($genre, object.genres);
+  $releaseDate.textContent = object.released;
+  $developer.replaceChildren();
+  addListElements($developer, object.developers);
+  $publisher.replaceChildren();
+  addListElements($publisher, object.publishers);
+  $esrbRating.textContent = object.esrb_rating.name;
+  $website.href = object.website;
+}
+
+function addListElements(parentElement, array) {
+  for (var i = 0; i < array.length; i++) {
+    var child = document.createElement('li');
+    child.textContent = array[i].name;
+    parentElement.appendChild(child);
+  }
+}
+
+function toggleModal(event) {
+  if (view !== 'search') {
+    $searchView.hidden = false;
+    previousView = view;
+    view = 'search';
+  } else {
+    $searchView.hidden = true;
+    view = previousView;
+    $searchInput.value = null;
+  }
+
+  $resultsView.hidden = true;
+}
+
+function renderResults(array) {
+  var $resultsList = document.querySelector('.results-list');
+  $resultsList.replaceChildren();
+
+  for (var i = 0; i < 10; i++) {
+    $resultsList.appendChild(
+      generateDomTree('li', {},
+        [generateDomTree('a', {
+          href: '',
+          'data-url': domain + '/' + array[i].slug + key,
+          textContent: array[i].name
+        })]));
+  }
+}
+
 $cards.addEventListener('click', function (event) {
   if (event.target.closest('.card-featured')) {
     view = 'detail';
@@ -132,40 +189,6 @@ $nextButton.addEventListener('click', function (event) {
   }
 });
 
-function fillDetail(object) {
-  var $title = document.querySelector('.title');
-  var $thumbnail = document.querySelector('.thumbnail-detail');
-  var $about = document.querySelector('.about');
-  var $genre = document.querySelector('.genre');
-  var $releaseDate = document.querySelector('.release-date');
-  var $developer = document.querySelector('.developer');
-  var $publisher = document.querySelector('.publisher');
-  var $esrbRating = document.querySelector('.esrb-rating');
-  var $website = document.querySelector('.website');
-
-  $title.textContent = object.name;
-  $thumbnail.src = object.background_image;
-  $thumbnail.alt = object.name;
-  $about.textContent = object.description_raw;
-  $genre.replaceChildren();
-  addListElements($genre, object.genres);
-  $releaseDate.textContent = object.released;
-  $developer.replaceChildren();
-  addListElements($developer, object.developers);
-  $publisher.replaceChildren();
-  addListElements($publisher, object.publishers);
-  $esrbRating.textContent = object.esrb_rating.name;
-  $website.href = object.website;
-}
-
-function addListElements(parentElement, array) {
-  for (var i = 0; i < array.length; i++) {
-    var child = document.createElement('li');
-    child.textContent = array[i].name;
-    parentElement.appendChild(child);
-  }
-}
-
 $backLink.addEventListener('click', function (event) {
   view = 'featured';
   $featuredView.hidden = false;
@@ -175,35 +198,6 @@ $backLink.addEventListener('click', function (event) {
 $topLink.addEventListener('click', function (event) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
-
-function toggleModal(event) {
-  if (view !== 'search') {
-    $searchView.hidden = false;
-    previousView = view;
-    view = 'search';
-  } else {
-    $searchView.hidden = true;
-    view = previousView;
-    $searchInput.value = null;
-  }
-
-  $resultsView.hidden = true;
-}
-
-function renderResults(array) {
-  var $resultsList = document.querySelector('.results-list');
-  $resultsList.replaceChildren();
-
-  for (var i = 0; i < 10; i++) {
-    $resultsList.appendChild(
-      generateDomTree('li', {},
-        [generateDomTree('a', {
-          href: '',
-          'data-url': domain + '/' + array[i].slug + key,
-          textContent: array[i].name
-        })]));
-  }
-}
 
 $searchIcon.addEventListener('click', toggleModal);
 $closeButton.addEventListener('click', toggleModal);
@@ -219,4 +213,4 @@ $searchInput.addEventListener('keyup', function (event) {
   }
 });
 
-getData();
+getData(domain + key + pageParam + pageNumber.toString());

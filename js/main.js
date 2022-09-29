@@ -213,8 +213,9 @@ $searchInput.addEventListener('keyup', function (event) {
 
   if (event && timeoutId !== null) {
     clearTimeout(timeoutId);
+    timeoutId = setTimeout(function () { getData(searchUrl); }, 500);
   } else {
-    timeoutId = setTimeout(getData(searchUrl), 500);
+    timeoutId = setTimeout(function () { getData(searchUrl); }, 500);
   }
 });
 

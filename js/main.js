@@ -1,6 +1,7 @@
 var domain = 'https://api.rawg.io/api/games';
 var key = '?key=76e41dc99b8042e0b6f0cd116d9dadc1';
 var pageParam = '&page=';
+// var searchParam = '&search=';
 var pageUrl = null;
 var $featuredView = document.querySelector('[data-view="featured"]');
 var $detailView = document.querySelector('[data-view="detail"]');
@@ -14,9 +15,11 @@ var $nextButton = document.querySelector('.next-button');
 var $closeButton = document.querySelector('.close-button');
 var $pageNumberTop = document.querySelector('.page-number-top');
 var $pageNumberBot = document.querySelector('.page-number-bot');
+var $searchInput = document.querySelector('input');
 var previousView = null;
 var view = 'featured';
 var pageNumber = 1;
+// var timerId = null;
 
 function getData(url) {
   var xhr = new XMLHttpRequest();
@@ -123,20 +126,6 @@ function addListElements(parentElement, array) {
   }
 }
 
-function toggleModal(event) {
-  if (view !== 'search') {
-    $searchView.hidden = false;
-    previousView = view;
-    view = 'search';
-  } else {
-    $searchView.hidden = true;
-    view = previousView;
-  }
-}
-
-$searchIcon.addEventListener('click', toggleModal);
-$closeButton.addEventListener('click', toggleModal);
-
 $cards.addEventListener('click', function (event) {
   if (event.target.closest('.card-featured')) {
     view = 'detail';
@@ -181,6 +170,28 @@ $nextButton.addEventListener('click', function (event) {
   if (pageUrl === null) {
     $nextButton.hidden = true;
   }
+});
+
+function toggleModal(event) {
+  if (view !== 'search') {
+    $searchView.hidden = false;
+    previousView = view;
+    view = 'search';
+  } else {
+    $searchView.hidden = true;
+    view = previousView;
+  }
+}
+
+$searchIcon.addEventListener('click', toggleModal);
+$closeButton.addEventListener('click', toggleModal);
+
+$searchInput.addEventListener('keyup', function (event) {
+  // var input = $searchInput.value;
+  // console.log(input);
+
+  // var searchUrl = domain + key + searchParam + $searchInput.value;
+
 });
 
 getData();

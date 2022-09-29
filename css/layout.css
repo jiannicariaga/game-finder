@@ -40,7 +40,7 @@
 
 @media only screen and (min-width: 426px) {
   .container {
-    max-width: 768px;
+    max-width: 753px;
     padding: 0 0.5rem;
     margin: 0 auto;
   }
@@ -52,7 +52,6 @@
 
 @media only screen and (min-width: 769px) {
   .container {
-    width: 769px;
     margin: 0 auto;
   }
 

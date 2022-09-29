@@ -132,6 +132,7 @@ $cards.addEventListener('click', function (event) {
     view = 'detail';
     $featuredView.hidden = true;
     $detailView.hidden = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     getData(gameUrl);
   }

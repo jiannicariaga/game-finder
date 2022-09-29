@@ -1,7 +1,7 @@
 var domain = 'https://api.rawg.io/api/games';
 var key = '?key=76e41dc99b8042e0b6f0cd116d9dadc1';
 var pageParam = '&page=';
-// var searchParam = '&search=';
+var searchParam = '&search=';
 var pageUrl = null;
 var $featuredView = document.querySelector('[data-view="featured"]');
 var $detailView = document.querySelector('[data-view="detail"]');
@@ -19,7 +19,7 @@ var $searchInput = document.querySelector('input');
 var previousView = null;
 var view = 'featured';
 var pageNumber = 1;
-// var timerId = null;
+var timeoutId = null;
 
 function getData(url) {
   var xhr = new XMLHttpRequest();
@@ -27,6 +27,8 @@ function getData(url) {
   if (view === 'featured') {
     xhr.open('GET', domain + key + pageParam + pageNumber.toString());
   } else if (view === 'detail') {
+    xhr.open('GET', url);
+  } else if (view === 'search') {
     xhr.open('GET', url);
   }
 
@@ -38,6 +40,9 @@ function getData(url) {
       pageUrl = xhr.response.next;
     } else if (view === 'detail') {
       fillDetail(xhr.response);
+    } else if (view === 'search') {
+      // console.log(xhr.response);
+      timeoutId = null;
     }
   });
 
@@ -187,11 +192,13 @@ $searchIcon.addEventListener('click', toggleModal);
 $closeButton.addEventListener('click', toggleModal);
 
 $searchInput.addEventListener('keyup', function (event) {
-  // var input = $searchInput.value;
-  // console.log(input);
+  var searchUrl = domain + key + searchParam + $searchInput.value;
 
-  // var searchUrl = domain + key + searchParam + $searchInput.value;
-
+  if (event && timeoutId !== null) {
+    clearTimeout(timeoutId);
+  } else {
+    timeoutId = setTimeout(getData(searchUrl), 1000);
+  }
 });
 
 getData();

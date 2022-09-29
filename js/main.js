@@ -4,13 +4,17 @@ var pageParam = '&page=';
 var pageUrl = null;
 var $featuredView = document.querySelector('[data-view="featured"]');
 var $detailView = document.querySelector('[data-view="detail"]');
+var $searchView = document.querySelector('[data-view="search"]');
 var $cards = document.querySelector('.cards');
+var $searchIcon = document.querySelector('.search-icon');
 var $backLink = document.querySelector('.back-link');
 var $topLink = document.querySelector('.top-link');
 var $backButton = document.querySelector('.back-button');
 var $nextButton = document.querySelector('.next-button');
+var $closeButton = document.querySelector('.close-button');
 var $pageNumberTop = document.querySelector('.page-number-top');
 var $pageNumberBot = document.querySelector('.page-number-bot');
+var previousView = null;
 var view = 'featured';
 var pageNumber = 1;
 
@@ -118,6 +122,20 @@ function addListElements(parentElement, array) {
     parentElement.appendChild(child);
   }
 }
+
+function toggleModal(event) {
+  if (view !== 'search') {
+    $searchView.hidden = false;
+    previousView = view;
+    view = 'search';
+  } else {
+    $searchView.hidden = true;
+    view = previousView;
+  }
+}
+
+$searchIcon.addEventListener('click', toggleModal);
+$closeButton.addEventListener('click', toggleModal);
 
 $cards.addEventListener('click', function (event) {
   if (event.target.closest('.card-featured')) {

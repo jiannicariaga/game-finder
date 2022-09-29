@@ -5,7 +5,8 @@ var pageUrl = null;
 var $featuredView = document.querySelector('[data-view="featured"]');
 var $detailView = document.querySelector('[data-view="detail"]');
 var $cards = document.querySelector('.cards');
-var $backLink = document.querySelector('a');
+var $backLink = document.querySelector('.back-link');
+var $topLink = document.querySelector('.top-link');
 var $backButton = document.querySelector('.back-button');
 var $nextButton = document.querySelector('.next-button');
 var $pageNumberTop = document.querySelector('.page-number-top');
@@ -100,14 +101,14 @@ function fillDetail(object) {
   $thumbnail.alt = object.name;
   $about.textContent = object.description_raw;
   $genre.replaceChildren();
+  addListElements($genre, object.genres);
   $releaseDate.textContent = object.released;
   $developer.replaceChildren();
+  addListElements($developer, object.developers);
   $publisher.replaceChildren();
+  addListElements($publisher, object.publishers);
   $esrbRating.textContent = object.esrb_rating.name;
   $website.href = object.website;
-  addListElements($genre, object.genres);
-  addListElements($developer, object.developers);
-  addListElements($publisher, object.publishers);
 }
 
 function addListElements(parentElement, array) {
@@ -132,6 +133,10 @@ $backLink.addEventListener('click', function (event) {
   view = 'featured';
   $featuredView.hidden = false;
   $detailView.hidden = true;
+});
+
+$topLink.addEventListener('click', function (event) {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 $backButton.addEventListener('click', function (event) {

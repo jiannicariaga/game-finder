@@ -38,6 +38,10 @@
   text-align: right;
 }
 
+.link-padding {
+  padding-top: 19.2px;
+}
+
 @media only screen and (min-width: 426px) {
   .container {
     max-width: 753px;

@@ -11,6 +11,5 @@ if (previousGameDataJSON !== null) {
 
 window.addEventListener('beforeunload', function (event) {
   var dataJSON = JSON.stringify(data);
-
   localStorage.setItem('game-data', dataJSON);
 });

@@ -15,9 +15,12 @@
 <body>
   <header>
     <div class="container">
-      <div class="row">
-        <div class="col-100">
+      <div class="row flex-align-center">
+        <div class="col-50">
           <h1>GameFinder</h1>
+        </div>
+        <div class="col-50 text-right">
+          <span class="search-icon fas fa-magnifying-glass"></span>
         </div>
       </div>
     </div>
@@ -33,26 +36,26 @@
         </div>
       </div>
       <div class="cards row flex-wrap flex-space-between"></div>
-      <div class="container">
-        <div class="row flex-space-between flex-align-center">
-          <div class="col-33">
-            <button class="back-button" hidden>Back</button>
-          </div>
-          <div class="col-33 text-center">
-            <h2 class="page-number-bot">1</h2>
-          </div>
-          <div class="col-33 text-right">
-            <button class="next-button">Next</button>
-          </div>
+      <div class="row flex-space-between flex-align-center">
+        <div class="col-33">
+          <button class="back-button" hidden>Back</button>
+        </div>
+        <div class="col-33 text-center">
+          <h2 class="page-number-bot">1</h2>
+        </div>
+        <div class="col-33 text-right">
+          <button class="next-button">Next</button>
         </div>
       </div>
     </section>
     <section class="container" data-view="detail" hidden>
       <div class="row">
         <div class="col-100">
-          <div class="row back-link flex-align-center">
+          <div class="row flex-align-center link-back-padding">
             <div class="col-100">
-              <a href="#"><span class="icon fas fa-angle-left"></span>Back</a>
+              <a class="back-link" href="#">
+                <span class="arrow-icon fas fa-angle-left"></span>Back
+              </a>
             </div>
           </div>
           <div class="row">
@@ -103,11 +106,50 @@
                   <div class="col-50">
                     <h3>Website</h3>
                     <ul>
-                      <li><a class="website" href="" target="_blank">Link</a></li>
+                      <li>
+                        <a class="website" href="#" target="_blank">Link</a>
+                      </li>
                     </ul>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="row flex-align-center text-center link-top-padding">
+            <div class="col-100">
+              <a class="top-link" href="#">
+                <span class="arrow-icon fas fa-angle-up"></span>Top
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section data-view="search" hidden>
+      <div class="modal-overlay">
+        <div class="modal">
+          <form class="container">
+            <div class="row">
+              <div class="col-85">
+                <input type="text" placeholder="Search...">
+              </div>
+              <div class="col-15">
+                <button class="submit-button" type="submit">
+                  <span class="fas fa-magnifying-glass"></span>
+                </button>
+              </div>
+            </div>
+          </form>
+          <div class="container" data-view="results" hidden>
+            <div class="results row">
+              <div class="col-100">
+                <ul class="results-list"></ul>
+              </div>
+            </div>
+          </div>
+          <div class="row text-center">
+            <div class="col-100">
+              <button class="close-button">Back</button>
             </div>
           </div>
         </div>

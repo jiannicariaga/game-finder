@@ -16,8 +16,12 @@ h1 {
   cursor: pointer;
 }
 
-.back-link {
-  padding-top: 19.2px;
+.search-icon {
+  font-size: 1.25rem;
+}
+
+.search-icon:hover {
+  cursor: pointer;
 }
 
 a {
@@ -28,7 +32,7 @@ a:hover {
   text-decoration: none;
 }
 
-.icon {
+.arrow-icon {
   padding-right: 0.25rem;
 }
 
@@ -86,6 +90,7 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top;
   border-radius: 10px 10px 0 0;
 }
 
@@ -122,7 +127,9 @@ li {
 }
 
 .back-button,
-.next-button {
+.next-button,
+.close-button,
+.submit-button {
   color: #fff;
   background-color: #5667a6;
   font-family: Roboto, sans-serif;
@@ -133,9 +140,82 @@ li {
   padding: 0.5rem 1.25rem;
 }
 
+.submit-button {
+  width: 100%;
+  height: 100%;
+  border-radius: 0 20px 20px 0;
+  padding: 0;
+}
+
+.submit-button > span {
+  font-size: 1rem;
+}
+
+.close-button {
+  margin-top: 35px;
+}
+
 .back-button:hover,
-.next-button:hover {
+.next-button:hover,
+.submit-button:hover,
+.close-button:hover {
   cursor: pointer;
+}
+
+.link-back-padding {
+  padding-top: 19.2px;
+}
+
+.link-top-padding {
+  padding-top: 19.2px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0 0 0 / 75%);
+  z-index: 1;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+input {
+  color: #5667a6;
+  font-family: Roboto, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  width: 100%;
+  border: none;
+  border-radius: 20px 0 0 20px;
+  padding: 0.5rem 1rem;
+}
+
+input:focus {
+  outline: none;
+}
+
+.results {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 0 1rem;
+  margin-top: 35px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.results-list a {
+  color: #5667a6;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 @media only screen and (min-width: 426px) {

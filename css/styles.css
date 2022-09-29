@@ -16,6 +16,10 @@ h1 {
   cursor: pointer;
 }
 
+.search-icon {
+  font-size: 1.25rem;
+}
+
 a {
   color: #fff;
 }
@@ -24,7 +28,7 @@ a:hover {
   text-decoration: none;
 }
 
-.icon {
+.arrow-icon {
   padding-right: 0.25rem;
 }
 

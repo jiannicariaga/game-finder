@@ -4,7 +4,8 @@ var pageParam = '&page=';
 var searchParam = '&search=';
 var view = 'featured';
 var pageNumber = 1;
-var pageUrl = null;
+var previousUrl = null;
+var nextUrl = null;
 var previousView = null;
 var timeoutId = null;
 
@@ -42,7 +43,8 @@ function getData(url) {
   xhr.addEventListener('load', function (event) {
     if (view === 'featured') {
       renderCards(xhr.response.results);
-      pageUrl = xhr.response.next;
+      previousUrl = xhr.response.previous;
+      nextUrl = xhr.response.next;
     } else if (view === 'detail') {
       fillDetail(xhr.response);
     } else if (view === 'search') {
@@ -196,7 +198,7 @@ $backButton.addEventListener('click', function (event) {
   $pageNumberBot.textContent = pageNumber;
   $nextButton.hidden = false;
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  getData(pageUrl);
+  getData(previousUrl);
 
   if (pageNumber === 1) {
     $backButton.hidden = true;
@@ -209,9 +211,9 @@ $nextButton.addEventListener('click', function (event) {
   $pageNumberBot.textContent = pageNumber;
   $backButton.hidden = false;
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  getData(pageUrl);
+  getData(nextUrl);
 
-  if (!pageUrl) {
+  if (nextUrl === null) {
     $nextButton.hidden = true;
   }
 });

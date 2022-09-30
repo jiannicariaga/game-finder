@@ -17,16 +17,19 @@ h1 {
 }
 
 .bookmark-icon-header,
+.bookmark-icon-detail,
 .search-icon {
   font-size: 1.25rem;
 }
 
 .bookmark-icon-header,
+.bookmark-icon-detail,
 .search-icon:hover {
   cursor: pointer;
 }
 
-.bookmark-icon-header {
+.bookmark-icon-header,
+.bookmark-icon-detail {
   margin-right: 1rem;
 }
 

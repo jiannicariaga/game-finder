@@ -8,18 +8,22 @@ var pageUrl = null;
 var previousView = null;
 var timeoutId = null;
 
+var $viewLabel = document.querySelector('.view-label');
 var $featuredView = document.querySelector('[data-view="featured"]');
 var $detailView = document.querySelector('[data-view="detail"]');
 var $searchView = document.querySelector('[data-view="search"]');
 var $searchResultsView = document.querySelector('[data-view="search-results"]');
+var $searchIcon = document.querySelector('.search-icon');
 var $cards = document.querySelector('.cards');
 var $backButton = document.querySelector('.back-button');
 var $nextButton = document.querySelector('.next-button');
 var $pageNumberTop = document.querySelector('.page-number-top');
 var $pageNumberBot = document.querySelector('.page-number-bot');
-var $backLink = document.querySelector('.back-link');
+var $backLinkDetail = document.querySelector('.back-link-detail');
+var $backLinkResults = document.querySelector('.back-link-results');
+var $backLinkResultsContainer = document.querySelector('.back-to-featured');
 var $topLink = document.querySelector('.top-link');
-var $searchIcon = document.querySelector('.search-icon');
+var $form = document.querySelector('form');
 var $searchInput = document.querySelector('input');
 var $resultsList = document.querySelector('.results-list');
 var $closeButton = document.querySelector('.close-button');
@@ -27,7 +31,7 @@ var $closeButton = document.querySelector('.close-button');
 function getData(url) {
   var xhr = new XMLHttpRequest();
 
-  if (view === 'featured') {
+  if (view === 'featured' && previousView !== 'search') {
     xhr.open('GET', domain + key + pageParam + pageNumber.toString());
   } else {
     xhr.open('GET', url);
@@ -62,7 +66,7 @@ function generateDomTree(tagName, attributes, children) {
     if (key === 'textContent') {
       $element.textContent = attributes.textContent;
     } else {
-      $element.setAttribute(key, attributes[key]);
+      $element.setAttribute(key, attributes[key]); // CHECK FOR NULL
     }
   }
 
@@ -202,11 +206,14 @@ $nextButton.addEventListener('click', function (event) {
   }
 });
 
-$backLink.addEventListener('click', function (event) {
+function toFeatured(event) {
   view = 'featured';
   $featuredView.hidden = false;
   $detailView.hidden = true;
-});
+}
+
+$backLinkDetail.addEventListener('click', toFeatured);
+$backLinkResults.addEventListener('click', toFeatured);
 
 $topLink.addEventListener('click', function (event) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -228,13 +235,31 @@ $searchInput.addEventListener('keyup', function (event) {
 
 $resultsList.addEventListener('click', function (event) {
   if (event.target.matches('a')) {
-    previousView = view;
     view = 'detail';
     $featuredView.hidden = true;
     $detailView.hidden = false;
     $searchView.hidden = true;
     getData(event.target.getAttribute('data-url'));
   }
+});
+
+$form.addEventListener('submit', function (event) {
+  event.preventDefault();
+  var searchUrl = domain + key + searchParam + $searchInput.value;
+  previousView = view;
+  view = 'featured';
+  $viewLabel.textContent = 'Search Results';
+  $backLinkResultsContainer.hidden = false;
+  $featuredView.hidden = false;
+  $detailView.hidden = true;
+  $searchView.hidden = true;
+  getData(searchUrl);
+});
+
+$backLinkResultsContainer.addEventListener('click', function (event) {
+  $viewLabel.textContent = 'Featured';
+  $backLinkResultsContainer.hidden = true;
+  getData(domain + key + pageParam + pageNumber.toString());
 });
 
 getData();

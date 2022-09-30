@@ -66,7 +66,11 @@ function generateDomTree(tagName, attributes, children) {
     if (key === 'textContent') {
       $element.textContent = attributes.textContent;
     } else {
-      $element.setAttribute(key, attributes[key]); // CHECK FOR NULL
+      if (attributes[key] === null) {
+        $element.setAttribute(key, 'https://via.placeholder.com/200x200.jpg?text=+');
+      } else {
+        $element.setAttribute(key, attributes[key]);
+      }
     }
   }
 
@@ -125,7 +129,13 @@ function fillDetail(object) {
   addListElements($developer, object.developers);
   $publisher.replaceChildren();
   addListElements($publisher, object.publishers);
-  $esrbRating.textContent = object.esrb_rating.name;
+
+  if (object.esrb_rating !== null) {
+    $esrbRating.textContent = object.esrb_rating.name;
+  } else {
+    $esrbRating.textContent = '';
+  }
+
   $website.href = object.website;
 }
 

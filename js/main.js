@@ -9,11 +9,9 @@ var nextUrl = null;
 var previousView = null;
 var timeoutId = null;
 var currentDetail = {
-  cardInfo: {
-    background_image: null,
-    name: null
-  },
-  detailUrl: null
+  background_image: null,
+  name: null,
+  slug: null
 };
 
 var $viewLabel = document.querySelector('.view-label');
@@ -52,17 +50,18 @@ function getData(url) {
 
   xhr.addEventListener('load', function (event) {
     if (view === 'featured') {
-      renderCards(xhr.response.results);
       previousUrl = xhr.response.previous;
       nextUrl = xhr.response.next;
+      renderCards(xhr.response.results);
     } else if (view === 'detail') {
+      currentDetail.background_image = xhr.response.background_image;
+      currentDetail.name = xhr.response.name;
+      currentDetail.slug = xhr.response.slug;
       fillDetail(xhr.response);
-      currentDetail.cardInfo.background_image = xhr.response.background_image;
-      currentDetail.cardInfo.name = xhr.response.name;
     } else if (view === 'search') {
-      renderResults(xhr.response.results);
       $searchResultsView.hidden = false;
       timeoutId = null;
+      renderResults(xhr.response.results);
     }
   });
 
@@ -150,17 +149,14 @@ function fillDetail(object) {
     $esrbRating.textContent = '';
   }
 
-  if (data.bookmarks === undefined) {
+  var indexOfBookmark = data.bookmarks.findIndex(function (object) {
+    return object.slug === currentDetail.slug;
+  });
+
+  if (indexOfBookmark === -1) {
     $bookmarkIconDetail.className = 'bookmark-icon-detail far fa-bookmark';
   } else {
-    for (var i = 0; i < data.bookmarks.length; i++) {
-      if (currentDetail.detailUrl === data.bookmarks[i].detailUrl) {
-        $bookmarkIconDetail.className = 'bookmark-icon-detail fas fa-bookmark';
-        break;
-      } else {
-        $bookmarkIconDetail.className = 'bookmark-icon-detail far fa-bookmark';
-      }
-    }
+    $bookmarkIconDetail.className = 'bookmark-icon-detail fas fa-bookmark';
   }
 }
 
@@ -212,7 +208,6 @@ $cards.addEventListener('click', function (event) {
     $detailView.hidden = false;
     window.scrollTo({ top: 0, behavior: 'smooth' });
     getData(event.target.closest('.card-featured').getAttribute('data-url'));
-    currentDetail.detailUrl = event.target.closest('.card-featured').getAttribute('data-url');
   }
 });
 
@@ -246,6 +241,7 @@ function toFeatured(event) {
   view = 'featured';
   $featuredView.hidden = false;
   $detailView.hidden = true;
+  getData();
 }
 
 $backLinkDetail.addEventListener('click', toFeatured);
@@ -315,12 +311,12 @@ $bookmarkIconHeader.addEventListener('click', function (event) {
   $backButton.hidden = true;
   $pageNumberBot.hidden = true;
   $nextButton.hidden = true;
-  $cards.replaceChildren();
+  renderCards(data.bookmarks);
 });
 
 $bookmarkIconDetail.addEventListener('click', function (event) {
   var indexOfBookmark = data.bookmarks.findIndex(function (object) {
-    return object.detailUrl === currentDetail.detailUrl;
+    return object.slug === currentDetail.slug;
   });
 
   if (indexOfBookmark === -1) {

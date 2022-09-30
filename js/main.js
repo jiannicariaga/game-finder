@@ -271,6 +271,7 @@ $form.addEventListener('submit', function (event) {
 $backLinkResultsContainer.addEventListener('click', function (event) {
   $viewLabel.textContent = 'Featured';
   $backLinkResultsContainer.hidden = true;
+  $cards.replaceChildren();
   getData(domain + key + pageParam + pageNumber.toString());
 });
 

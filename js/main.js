@@ -317,4 +317,13 @@ $bookmarkIconHeader.addEventListener('click', function (event) {
   $cards.replaceChildren();
 });
 
+$bookmarkIconDetail.addEventListener('click', function (event) {
+  if ($bookmarkIconDetail.className === 'bookmark-icon-detail far fa-bookmark') {
+    $bookmarkIconDetail.className = 'bookmark-icon-detail fas fa-bookmark';
+    data.bookmarks.push(currentDetail);
+  } else {
+    $bookmarkIconDetail.className = 'bookmark-icon-detail far fa-bookmark';
+  }
+});
+
 getData();

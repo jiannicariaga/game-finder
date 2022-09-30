@@ -2,7 +2,7 @@
 
 var data = {
   view: 'featured',
-  bookmarks: {}
+  bookmarks: []
 };
 var previousGameDataJSON = localStorage.getItem('game-data');
 

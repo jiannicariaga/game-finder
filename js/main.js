@@ -150,11 +150,15 @@ function fillDetail(object) {
     $esrbRating.textContent = '';
   }
 
-  for (var i = 0; i < data.bookmarks.length; i++) {
-    if (currentDetail.detailUrl === data.bookmarks[i].detailUrl) {
-      $bookmarkIconDetail.className = 'bookmark-icon-detail fas fa-bookmark';
-    } else {
-      $bookmarkIconDetail.className = 'bookmark-icon-detail far fa-bookmark';
+  if (data.bookmarks === undefined) {
+    $bookmarkIconDetail.className = 'bookmark-icon-detail far fa-bookmark';
+  } else {
+    for (var i = 0; i < data.bookmarks.length; i++) {
+      if (currentDetail.detailUrl === data.bookmarks[i].detailUrl) {
+        $bookmarkIconDetail.className = 'bookmark-icon-detail fas fa-bookmark';
+      } else {
+        $bookmarkIconDetail.className = 'bookmark-icon-detail far fa-bookmark';
+      }
     }
   }
 }

@@ -8,6 +8,13 @@ var previousUrl = null;
 var nextUrl = null;
 var previousView = null;
 var timeoutId = null;
+var currentDetail = {
+  cardInfo: {
+    background_image: null,
+    name: null
+  },
+  detailUrl: null
+};
 
 var $viewLabel = document.querySelector('.view-label');
 var $featuredView = document.querySelector('[data-view="featured"]');
@@ -191,6 +198,7 @@ $cards.addEventListener('click', function (event) {
     $detailView.hidden = false;
     window.scrollTo({ top: 0, behavior: 'smooth' });
     getData(event.target.closest('.card-featured').getAttribute('data-url'));
+    currentDetail.detailUrl = event.target.closest('.card-featured').getAttribute('data-url');
   }
 });
 

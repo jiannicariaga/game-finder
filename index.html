@@ -15,11 +15,13 @@
 <body>
   <header>
     <div class="container">
-      <div class="row flex-align-center">
-        <div class="col-50">
-          <h1>GameFinder</h1>
+      <div class="row flex-align-center flex-space-between">
+        <div class="col-70">
+          <h1>
+            <span class="fas fa-gamepad"></span> GameFinder
+          </h1>
         </div>
-        <div class="col-50 text-right">
+        <div class="col-30 text-right">
           <span class="search-icon fas fa-magnifying-glass"></span>
         </div>
       </div>
@@ -27,9 +29,16 @@
   </header>
   <main>
     <section class="container" data-view="featured">
+      <div class="back-to-featured flex-align-center link-back-padding" hidden>
+        <div class="col-100">
+          <a class="back-link-results" href="#">
+            <span class="arrow-icon fas fa-angle-left"></span>Back
+          </a>
+        </div>
+      </div>
       <div class="row flex-align-center">
         <div class="col-50">
-          <h2>Featured</h2>
+          <h2 class="view-label">Featured</h2>
         </div>
         <div class="col-50">
           <p class="text-right">Page <span class="page-number-top">1</span></p>
@@ -53,7 +62,7 @@
         <div class="col-100">
           <div class="row flex-align-center link-back-padding">
             <div class="col-100">
-              <a class="back-link" href="#">
+              <a class="back-link-detail" href="#">
                 <span class="arrow-icon fas fa-angle-left"></span>Back
               </a>
             </div>
@@ -140,7 +149,7 @@
               </div>
             </div>
           </form>
-          <div class="container" data-view="results" hidden>
+          <div class="container" data-view="search-results" hidden>
             <div class="results row">
               <div class="col-100">
                 <ul class="results-list"></ul>

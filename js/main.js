@@ -22,6 +22,7 @@ var $detailView = document.querySelector('[data-view="detail"]');
 var $searchView = document.querySelector('[data-view="search"]');
 var $searchResultsView = document.querySelector('[data-view="search-results"]');
 var $bookmarkIconHeader = document.querySelector('.bookmark-icon-header');
+var $bookmarkIconDetail = document.querySelector('.bookmark-icon-detail');
 var $searchIcon = document.querySelector('.search-icon');
 var $cards = document.querySelector('.cards');
 var $backButton = document.querySelector('.back-button');
@@ -56,6 +57,8 @@ function getData(url) {
       nextUrl = xhr.response.next;
     } else if (view === 'detail') {
       fillDetail(xhr.response);
+      currentDetail.cardInfo.background_image = xhr.response.background_image;
+      currentDetail.cardInfo.name = xhr.response.name;
     } else if (view === 'search') {
       renderResults(xhr.response.results);
       $searchResultsView.hidden = false;
@@ -128,7 +131,6 @@ function fillDetail(object) {
   var $publisher = document.querySelector('.publisher');
   var $esrbRating = document.querySelector('.esrb-rating');
   var $website = document.querySelector('.website');
-
   $title.textContent = object.name;
   $thumbnail.src = object.background_image;
   $thumbnail.alt = object.name;
@@ -140,6 +142,7 @@ function fillDetail(object) {
   addListElements($developer, object.developers);
   $publisher.replaceChildren();
   addListElements($publisher, object.publishers);
+  $website.href = object.website;
 
   if (object.esrb_rating !== null) {
     $esrbRating.textContent = object.esrb_rating.name;
@@ -147,7 +150,13 @@ function fillDetail(object) {
     $esrbRating.textContent = '';
   }
 
-  $website.href = object.website;
+  for (var i = 0; i < data.bookmarks.length; i++) {
+    if (currentDetail.detailUrl === data.bookmarks[i].detailUrl) {
+      $bookmarkIconDetail.className = 'bookmark-icon-detail fas fa-bookmark';
+    } else {
+      $bookmarkIconDetail.className = 'bookmark-icon-detail far fa-bookmark';
+    }
+  }
 }
 
 function addListElements(parentElement, array) {

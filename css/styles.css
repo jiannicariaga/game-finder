@@ -28,9 +28,12 @@ h1 {
   cursor: pointer;
 }
 
-.bookmark-icon-header,
-.bookmark-icon-detail {
+.bookmark-icon-header {
   margin-right: 1rem;
+}
+
+.bookmark-icon-detail {
+  margin-right: 0.5rem;
 }
 
 a {

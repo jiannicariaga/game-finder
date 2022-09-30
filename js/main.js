@@ -156,6 +156,7 @@ function fillDetail(object) {
     for (var i = 0; i < data.bookmarks.length; i++) {
       if (currentDetail.detailUrl === data.bookmarks[i].detailUrl) {
         $bookmarkIconDetail.className = 'bookmark-icon-detail fas fa-bookmark';
+        break;
       } else {
         $bookmarkIconDetail.className = 'bookmark-icon-detail far fa-bookmark';
       }
@@ -318,11 +319,16 @@ $bookmarkIconHeader.addEventListener('click', function (event) {
 });
 
 $bookmarkIconDetail.addEventListener('click', function (event) {
-  if ($bookmarkIconDetail.className === 'bookmark-icon-detail far fa-bookmark') {
+  var indexOfBookmark = data.bookmarks.findIndex(function (object) {
+    return object.detailUrl === currentDetail.detailUrl;
+  });
+
+  if (indexOfBookmark === -1) {
     $bookmarkIconDetail.className = 'bookmark-icon-detail fas fa-bookmark';
     data.bookmarks.push(currentDetail);
   } else {
     $bookmarkIconDetail.className = 'bookmark-icon-detail far fa-bookmark';
+    data.bookmarks.splice(indexOfBookmark, 1);
   }
 });
 

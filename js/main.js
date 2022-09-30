@@ -2,30 +2,37 @@ var domain = 'https://api.rawg.io/api/games';
 var key = '?key=76e41dc99b8042e0b6f0cd116d9dadc1';
 var pageParam = '&page=';
 var searchParam = '&search=';
+var view = 'featured';
+var pageNumber = 1;
 var pageUrl = null;
+var previousView = null;
+var timeoutId = null;
+
 var $featuredView = document.querySelector('[data-view="featured"]');
 var $detailView = document.querySelector('[data-view="detail"]');
 var $searchView = document.querySelector('[data-view="search"]');
-var $resultsView = document.querySelector('[data-view="results"]');
+var $searchResultsView = document.querySelector('[data-view="search-results"]');
 var $cards = document.querySelector('.cards');
-var $searchIcon = document.querySelector('.search-icon');
-var $backLink = document.querySelector('.back-link');
-var $topLink = document.querySelector('.top-link');
 var $backButton = document.querySelector('.back-button');
 var $nextButton = document.querySelector('.next-button');
-var $closeButton = document.querySelector('.close-button');
 var $pageNumberTop = document.querySelector('.page-number-top');
 var $pageNumberBot = document.querySelector('.page-number-bot');
+var $backLink = document.querySelector('.back-link');
+var $topLink = document.querySelector('.top-link');
+var $searchIcon = document.querySelector('.search-icon');
 var $searchInput = document.querySelector('input');
 var $resultsList = document.querySelector('.results-list');
-var previousView = null;
-var view = 'featured';
-var pageNumber = 1;
-var timeoutId = null;
+var $closeButton = document.querySelector('.close-button');
 
 function getData(url) {
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', url);
+
+  if (view === 'featured') {
+    xhr.open('GET', domain + key + pageParam + pageNumber.toString());
+  } else {
+    xhr.open('GET', url);
+  }
+
   xhr.responseType = 'json';
 
   xhr.addEventListener('load', function (event) {
@@ -36,6 +43,7 @@ function getData(url) {
       fillDetail(xhr.response);
     } else if (view === 'search') {
       renderResults(xhr.response.results);
+      $searchResultsView.hidden = false;
       timeoutId = null;
     }
   });
@@ -70,24 +78,24 @@ function renderCards(array) {
 
   for (var i = 0; i < array.length; i++) {
     $cards.appendChild(
-      generateDomTree('div', { class: 'card-wrapper col-50' },
-        [generateDomTree('div', {
+      generateDomTree('div', { class: 'card-wrapper col-50' }, [
+        generateDomTree('div', {
           class: 'card-featured row',
           'data-url': domain + '/' + array[i].slug + key
-        },
-        [generateDomTree('div', { class: 'col-100' },
-          [generateDomTree('div', { class: 'row' },
-            [generateDomTree('div', { class: 'card-thumbnail-featured col-100' },
-              [generateDomTree('img', {
-                src: array[i].background_image,
-                alt: array[i].name
-              })])]),
-          generateDomTree('div', { class: 'row' },
-            [generateDomTree('div', { class: 'card-title-featured col-100' },
-              [generateDomTree('h4', {
-                class: 'text-center',
-                textContent: array[i].name
-              })])])])])]));
+        }, [
+          generateDomTree('div', { class: 'col-100' }, [
+            generateDomTree('div', { class: 'row' }, [
+              generateDomTree('div', { class: 'card-thumbnail-featured col-100' }, [
+                generateDomTree('img', {
+                  src: array[i].background_image,
+                  alt: array[i].name
+                })])]),
+            generateDomTree('div', { class: 'row' }, [
+              generateDomTree('div', { class: 'card-title-featured col-100' }, [
+                generateDomTree('h4', {
+                  class: 'text-center',
+                  textContent: array[i].name
+                })])])])])]));
   }
 }
 
@@ -133,11 +141,11 @@ function toggleModal(event) {
   } else {
     $searchView.hidden = true;
     view = previousView;
-    $searchInput.value = null;
   }
 
+  $searchInput.value = null;
   $resultsList.replaceChildren();
-  $resultsView.hidden = true;
+  $searchResultsView.hidden = true;
 }
 
 function renderResults(array) {
@@ -151,7 +159,7 @@ function renderResults(array) {
     $resultsList.appendChild(
       generateDomTree('li', {},
         [generateDomTree('a', {
-          href: '',
+          href: '#',
           'data-url': domain + '/' + array[i].slug + key,
           textContent: array[i].name
         })]));
@@ -189,7 +197,7 @@ $nextButton.addEventListener('click', function (event) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
   getData(pageUrl);
 
-  if (pageUrl === null) {
+  if (!pageUrl) {
     $nextButton.hidden = true;
   }
 });
@@ -209,7 +217,6 @@ $closeButton.addEventListener('click', toggleModal);
 
 $searchInput.addEventListener('keyup', function (event) {
   var searchUrl = domain + key + searchParam + $searchInput.value;
-  $resultsView.hidden = false;
 
   if (event && timeoutId !== null) {
     clearTimeout(timeoutId);
@@ -219,4 +226,15 @@ $searchInput.addEventListener('keyup', function (event) {
   }
 });
 
-getData(domain + key + pageParam + pageNumber.toString());
+$resultsList.addEventListener('click', function (event) {
+  if (event.target.matches('a')) {
+    previousView = view;
+    view = 'detail';
+    $featuredView.hidden = true;
+    $detailView.hidden = false;
+    $searchView.hidden = true;
+    getData(event.target.getAttribute('data-url'));
+  }
+});
+
+getData();

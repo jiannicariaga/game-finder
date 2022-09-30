@@ -14,15 +14,17 @@ var $featuredView = document.querySelector('[data-view="featured"]');
 var $detailView = document.querySelector('[data-view="detail"]');
 var $searchView = document.querySelector('[data-view="search"]');
 var $searchResultsView = document.querySelector('[data-view="search-results"]');
+var $bookmarkIconHeader = document.querySelector('.bookmark-icon-header');
 var $searchIcon = document.querySelector('.search-icon');
 var $cards = document.querySelector('.cards');
 var $backButton = document.querySelector('.back-button');
 var $nextButton = document.querySelector('.next-button');
+var $pageLabel = document.querySelector('.page-label');
 var $pageNumberTop = document.querySelector('.page-number-top');
 var $pageNumberBot = document.querySelector('.page-number-bot');
 var $backLinkDetail = document.querySelector('.back-link-detail');
 var $backLinkResults = document.querySelector('.back-link-results');
-var $backLinkResultsContainer = document.querySelector('.back-to-featured');
+var $backLinkToFeatured = document.querySelector('.back-to-featured');
 var $topLink = document.querySelector('.top-link');
 var $form = document.querySelector('form');
 var $searchInput = document.querySelector('input');
@@ -261,18 +263,37 @@ $form.addEventListener('submit', function (event) {
   previousView = view;
   view = 'featured';
   $viewLabel.textContent = 'Search Results';
-  $backLinkResultsContainer.hidden = false;
+  $backLinkToFeatured.hidden = false;
   $featuredView.hidden = false;
   $detailView.hidden = true;
   $searchView.hidden = true;
   getData(searchUrl);
 });
 
-$backLinkResultsContainer.addEventListener('click', function (event) {
+$backLinkToFeatured.addEventListener('click', function (event) {
   $viewLabel.textContent = 'Featured';
-  $backLinkResultsContainer.hidden = true;
+  $backLinkToFeatured.hidden = true;
+  $pageLabel.hidden = false;
+  $pageNumberTop.hidden = false;
+  $backButton.hidden = true;
+  $pageNumberBot.hidden = false;
+  $nextButton.hidden = false;
   $cards.replaceChildren();
   getData(domain + key + pageParam + pageNumber.toString());
+});
+
+$bookmarkIconHeader.addEventListener('click', function (event) {
+  view = 'featured';
+  $viewLabel.textContent = 'Bookmarks';
+  $backLinkToFeatured.hidden = false;
+  $featuredView.hidden = false;
+  $detailView.hidden = true;
+  $pageLabel.hidden = true;
+  $pageNumberTop.hidden = true;
+  $backButton.hidden = true;
+  $pageNumberBot.hidden = true;
+  $nextButton.hidden = true;
+  $cards.replaceChildren();
 });
 
 getData();

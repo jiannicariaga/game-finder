@@ -1,13 +1,14 @@
 /* exported data */
 
 var data = {
-  view: 'featured'
+  view: 'featured',
+  bookmarks: []
 };
-var previousGameDataJSON = localStorage.getItem('game-data');
+// var previousGameDataJSON = localStorage.getItem('game-data');
 
-if (previousGameDataJSON !== null) {
-  data = JSON.parse(previousGameDataJSON);
-}
+// if (previousGameDataJSON !== null) {
+//   data = JSON.parse(previousGameDataJSON);
+// }
 
 window.addEventListener('beforeunload', function (event) {
   var dataJSON = JSON.stringify(data);

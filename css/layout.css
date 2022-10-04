@@ -34,16 +34,12 @@
   flex-basis: 15%;
 }
 
-.flex-align-center {
+.flex-center {
   align-items: center;
 }
 
 .flex-wrap {
   flex-wrap: wrap;
-}
-
-.flex-space-between {
-  justify-content: space-between;
 }
 
 .text-center {

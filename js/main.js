@@ -29,19 +29,17 @@ var $nextButton = document.querySelector('.next-button');
 
 var $detailView = document.querySelector('[data-view="detail"]');
 var $backLinkDetail = document.querySelector('.back-arrow-detail');
-var $bookmarkIconDetail = document.querySelector('.bookmark-icon-detail');
+var $bookmarkIconDetail = document.querySelector('.bookmark-action');
+var $topLink = document.querySelector('.up-arrow');
 
 var $searchView = document.querySelector('[data-view="search"]');
 var $searchResultsView = document.querySelector('[data-view="search-results"]');
-
-var $backLinkToFeatured = document.querySelector('.back-to-featured');
-
-var $topLink = document.querySelector('.top-link');
-
 var $form = document.querySelector('form');
 var $searchInput = document.querySelector('input');
 var $resultsList = document.querySelector('.results-list');
 var $closeButton = document.querySelector('.close-button');
+
+var $backLinkToFeatured = document.querySelector('.back-to-featured');
 
 function getData(url) {
   var xhr = new XMLHttpRequest();
@@ -128,7 +126,7 @@ function renderCards(array) {
 
 function fillDetail(object) {
   var $title = document.querySelector('.title');
-  var $thumbnail = document.querySelector('.thumbnail-detail');
+  var $banner = document.querySelector('.banner');
   var $about = document.querySelector('.about');
   var $genre = document.querySelector('.genre');
   var $releaseDate = document.querySelector('.release-date');
@@ -137,8 +135,8 @@ function fillDetail(object) {
   var $esrbRating = document.querySelector('.esrb-rating');
   var $website = document.querySelector('.website');
   $title.textContent = object.name;
-  $thumbnail.src = object.background_image;
-  $thumbnail.alt = object.name;
+  $banner.src = object.background_image;
+  $banner.alt = object.name;
   $about.textContent = object.description_raw;
   $genre.replaceChildren();
   addListElements($genre, object.genres);
@@ -160,9 +158,9 @@ function fillDetail(object) {
   });
 
   if (indexOfBookmark === -1) {
-    $bookmarkIconDetail.className = 'bookmark-icon-detail far fa-bookmark';
+    $bookmarkIconDetail.className = 'bookmark-action far fa-bookmark';
   } else {
-    $bookmarkIconDetail.className = 'bookmark-icon-detail fas fa-bookmark';
+    $bookmarkIconDetail.className = 'bookmark-action fas fa-bookmark';
   }
 }
 
@@ -326,10 +324,10 @@ $bookmarkIconDetail.addEventListener('click', function (event) {
   });
 
   if (indexOfBookmark === -1) {
-    $bookmarkIconDetail.className = 'bookmark-icon-detail fas fa-bookmark';
+    $bookmarkIconDetail.className = 'bookmark-action fas fa-bookmark';
     data.bookmarks.push(currentDetail);
   } else {
-    $bookmarkIconDetail.className = 'bookmark-icon-detail far fa-bookmark';
+    $bookmarkIconDetail.className = 'bookmark-action far fa-bookmark';
     data.bookmarks.splice(indexOfBookmark, 1);
   }
 });

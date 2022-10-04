@@ -17,7 +17,7 @@ h1 {
 
 .bookmarks,
 .search,
-.bookmark-icon-detail {
+.bookmark-action {
   font-size: 1.25rem;
 }
 
@@ -25,13 +25,9 @@ h1 {
   margin-right: 1rem;
 }
 
-.bookmark-icon-detail {
-  margin-right: 0.5rem;
-}
-
 .bookmarks,
 .search,
-.bookmark-icon-detail:hover {
+.bookmark-action:hover {
   cursor: pointer;
 }
 
@@ -96,8 +92,12 @@ main {
   height: 90px;
 }
 
-.card-thumbnail-detail {
-  height: 180px;
+.banner-wrapper {
+  height: 270px;
+}
+
+.card-detail-content {
+  padding: 0 1rem;
 }
 
 img {
@@ -184,12 +184,12 @@ li {
   cursor: pointer;
 }
 
-.link-back-padding {
+.link-wrapper-back {
   padding-top: 19.2px;
 }
 
-.link-top-padding {
-  padding-top: 19.2px;
+.link-wrapper-top {
+  padding: 19.2px 0;
 }
 
 .modal-overlay {

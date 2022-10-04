@@ -14,27 +14,25 @@ var currentDetail = {
   slug: null
 };
 
-var $featuredView = document.querySelector('[data-view="featured"]');
-var $detailView = document.querySelector('[data-view="detail"]');
-var $searchView = document.querySelector('[data-view="search"]');
-var $searchResultsView = document.querySelector('[data-view="search-results"]');
-
 var $bookmarkIconHeader = document.querySelector('.bookmarks');
 var $searchIcon = document.querySelector('.search');
-var $bookmarkIconDetail = document.querySelector('.bookmark-icon-detail');
 
+var $featuredView = document.querySelector('[data-view="featured"]');
+var $backLinkFeatured = document.querySelector('.back-arrow-featured');
 var $viewLabel = document.querySelector('.view-label');
 var $pageLabel = document.querySelector('.page-label');
-
-var $cards = document.querySelector('.cards');
-
-var $backButton = document.querySelector('.back-button');
-var $nextButton = document.querySelector('.next-button');
 var $pageNumberTop = document.querySelector('.page-number-top');
+var $cards = document.querySelector('.cards');
+var $backButton = document.querySelector('.back-button');
 var $pageNumberBot = document.querySelector('.page-number-bot');
+var $nextButton = document.querySelector('.next-button');
 
-var $backLinkFeatured = document.querySelector('.back-arrow-featured');
+var $detailView = document.querySelector('[data-view="detail"]');
 var $backLinkDetail = document.querySelector('.back-arrow-detail');
+var $bookmarkIconDetail = document.querySelector('.bookmark-icon-detail');
+
+var $searchView = document.querySelector('[data-view="search"]');
+var $searchResultsView = document.querySelector('[data-view="search-results"]');
 
 var $backLinkToFeatured = document.querySelector('.back-to-featured');
 

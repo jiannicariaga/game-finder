@@ -23,7 +23,7 @@
 }
 
 .col-33 {
-  flex-basis: 33%;
+  flex-basis: calc(100% / 3);
 }
 
 .col-30 {

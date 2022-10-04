@@ -140,6 +140,14 @@ li {
   line-height: 1.75rem;
 }
 
+.page-navigation {
+  margin: 19.92px 0;
+}
+
+.page-navigation h2 {
+  margin: 0;
+}
+
 .back-button,
 .next-button,
 .close-button,

@@ -14,24 +14,32 @@ var currentDetail = {
   slug: null
 };
 
-var $viewLabel = document.querySelector('.view-label');
 var $featuredView = document.querySelector('[data-view="featured"]');
 var $detailView = document.querySelector('[data-view="detail"]');
 var $searchView = document.querySelector('[data-view="search"]');
 var $searchResultsView = document.querySelector('[data-view="search-results"]');
-var $bookmarkIconHeader = document.querySelector('.bookmark-icon-header');
+
+var $bookmarkIconHeader = document.querySelector('.bookmarks');
+var $searchIcon = document.querySelector('.search');
 var $bookmarkIconDetail = document.querySelector('.bookmark-icon-detail');
-var $searchIcon = document.querySelector('.search-icon');
+
+var $viewLabel = document.querySelector('.view-label');
+var $pageLabel = document.querySelector('.page-label');
+
 var $cards = document.querySelector('.cards');
+
 var $backButton = document.querySelector('.back-button');
 var $nextButton = document.querySelector('.next-button');
-var $pageLabel = document.querySelector('.page-label');
 var $pageNumberTop = document.querySelector('.page-number-top');
 var $pageNumberBot = document.querySelector('.page-number-bot');
-var $backLinkDetail = document.querySelector('.back-link-detail');
-var $backLinkResults = document.querySelector('.back-link-results');
+
+var $backLinkFeatured = document.querySelector('.back-arrow-featured');
+var $backLinkDetail = document.querySelector('.back-arrow-detail');
+
 var $backLinkToFeatured = document.querySelector('.back-to-featured');
+
 var $topLink = document.querySelector('.top-link');
+
 var $form = document.querySelector('form');
 var $searchInput = document.querySelector('input');
 var $resultsList = document.querySelector('.results-list');
@@ -245,7 +253,7 @@ function toFeatured(event) {
 }
 
 $backLinkDetail.addEventListener('click', toFeatured);
-$backLinkResults.addEventListener('click', toFeatured);
+$backLinkFeatured.addEventListener('click', toFeatured);
 
 $topLink.addEventListener('click', function (event) {
   window.scrollTo({ top: 0, behavior: 'smooth' });

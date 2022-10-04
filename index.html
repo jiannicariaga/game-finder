@@ -20,21 +20,27 @@
           <h1><span class="fas fa-gamepad"></span> GameFinder</h1>
         </div>
         <div class="col-30 text-right">
-          <a class="bookmark-icon-header" href="#"><span class="fas fa-bookmark"></span></a>
-          <a class="search-icon" href="#"><span class="fas fa-magnifying-glass"></span></a>
+          <a class="bookmarks"><span class="fas fa-bookmark"></span></a>
+          <a class="search"><span class="fas fa-magnifying-glass"></span></a>
         </div>
       </div>
     </div>
   </header>
   <main>
     <section class="container" data-view="featured">
-      <div class="back-to-featured flex-align-center link-back-padding" hidden>
+      <div class="row">
         <div class="col-100">
-          <a class="back-link-results" href="#">
-            <span class="arrow-icon fas fa-angle-left"></span>Back
-          </a>
+          <div class="back-to-featured link-back-padding" hidden>
+            <a class="back-arrow-featured">
+              <span class="fas fa-angle-left"></span>Back
+            </a>
+          </div>
         </div>
       </div>
+
+
+
+
       <div class="row flex-align-center">
         <div class="col-50">
           <h2 class="view-label">Featured</h2>
@@ -56,94 +62,100 @@
         </div>
       </div>
     </section>
+
     <section class="container" data-view="detail" hidden>
+
+
       <div class="row">
         <div class="col-100">
-          <div class="row flex-align-center link-back-padding">
-            <div class="col-100">
-              <a class="back-link-detail" href="#">
-                <span class="arrow-icon fas fa-angle-left"></span>Back
-              </a>
-            </div>
+          <div class="link-back-padding">
+            <a class="back-arrow-detail">
+              <span class="fas fa-angle-left"></span>Back
+            </a>
           </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-100">
+          <h2 class="title"></h2>
+        </div>
+      </div>
+
+      <div class="card-detail row">
+        <div class="col-100">
           <div class="row">
-            <div class="col-100">
-              <h2 class="title"></h2>
+            <div class="card-thumbnail-detail col-100">
+              <img class="thumbnail-detail" src="" alt="">
             </div>
           </div>
-          <div class="card-detail row">
-            <div class="col-100">
-              <div class="row">
-                <div class="card-thumbnail-detail col-100">
-                  <img class="thumbnail-detail" src="" alt="">
+          <div class="container">
+            <div class="row">
+              <div class="col-100">
+                <div class="row flex-align-center">
+                  <div class="col-50">
+                    <h3>About</h3>
+                  </div>
+                  <div class="col-50 text-right">
+                    <span class="bookmark-icon-detail far fa-bookmark"></span>
+                  </div>
                 </div>
-              </div>
-              <div class="container">
                 <div class="row">
                   <div class="col-100">
-                    <div class="row flex-align-center">
-                      <div class="col-50">
-                        <h3>About</h3>
-                      </div>
-                      <div class="col-50 text-right">
-                        <span class="bookmark-icon-detail far fa-bookmark"></span>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-100">
-                        <p class="about"></p>
-                        <hr>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="meta-data row flex-wrap">
-                  <div class="col-50">
-                    <h3>Genre</h3>
-                    <ul class="genre"></ul>
-                  </div>
-                  <div class="col-50">
-                    <h3>Release Date</h3>
-                    <ul>
-                      <li class="release-date"></li>
-                    </ul>
-                  </div>
-                  <div class="col-50">
-                    <h3>Developer</h3>
-                    <ul class="developer"></ul>
-                  </div>
-                  <div class="col-50">
-                    <h3>Publisher</h3>
-                    <ul class="publisher"></ul>
-                  </div>
-                  <div class="col-50">
-                    <h3>ESRB Rating</h3>
-                    <ul>
-                      <li class="esrb-rating"></li>
-                    </ul>
-                  </div>
-                  <div class="col-50">
-                    <h3>Website</h3>
-                    <ul>
-                      <li>
-                        <a class="website" href="#" target="_blank">Link</a>
-                      </li>
-                    </ul>
+                    <p class="about"></p>
+                    <hr>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row flex-align-center text-center link-top-padding">
-            <div class="col-100">
-              <a class="top-link" href="#">
-                <span class="arrow-icon fas fa-angle-up"></span>Top
-              </a>
+            <div class="meta-data row flex-wrap">
+              <div class="col-50">
+                <h3>Genre</h3>
+                <ul class="genre"></ul>
+              </div>
+              <div class="col-50">
+                <h3>Release Date</h3>
+                <ul>
+                  <li class="release-date"></li>
+                </ul>
+              </div>
+              <div class="col-50">
+                <h3>Developer</h3>
+                <ul class="developer"></ul>
+              </div>
+              <div class="col-50">
+                <h3>Publisher</h3>
+                <ul class="publisher"></ul>
+              </div>
+              <div class="col-50">
+                <h3>ESRB Rating</h3>
+                <ul>
+                  <li class="esrb-rating"></li>
+                </ul>
+              </div>
+              <div class="col-50">
+                <h3>Website</h3>
+                <ul>
+                  <li>
+                    <a class="website" href="#" target="_blank">Link</a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <div class="row flex-align-center text-center link-top-padding">
+        <div class="col-100">
+          <a class="top-link" href="#">
+            <span class="arrow-icon fas fa-angle-up"></span>Top
+          </a>
+        </div>
+      </div>
     </section>
+
     <section data-view="search" hidden>
       <div class="modal-overlay">
         <div class="modal">

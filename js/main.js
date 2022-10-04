@@ -18,25 +18,25 @@ var $bookmarkIconHeader = document.querySelector('.bookmarks');
 var $searchIcon = document.querySelector('.search');
 
 var $featuredView = document.querySelector('[data-view="featured"]');
-var $backLinkFeatured = document.querySelector('.back-arrow-featured');
+var $backLinkFeat = document.querySelector('.back-arrow-featured');
 var $viewLabel = document.querySelector('.view-label');
 var $pageLabel = document.querySelector('.page-label');
-var $pageNumberTop = document.querySelector('.page-number-top');
+var $pageNumTop = document.querySelector('.page-number-top');
 var $cards = document.querySelector('.cards');
 var $backButton = document.querySelector('.back-button');
-var $pageNumberBot = document.querySelector('.page-number-bot');
+var $pageNumBot = document.querySelector('.page-number-bot');
 var $nextButton = document.querySelector('.next-button');
 
 var $detailView = document.querySelector('[data-view="detail"]');
-var $backLinkDetail = document.querySelector('.back-arrow-detail');
-var $bookmarkIconDetail = document.querySelector('.bookmark-action');
-var $topLink = document.querySelector('.up-arrow');
+var $backLinkDet = document.querySelector('.back-arrow-detail');
+var $bookmarkAction = document.querySelector('.bookmark-action');
+var $topLinkDet = document.querySelector('.up-arrow');
 
 var $searchView = document.querySelector('[data-view="search"]');
-var $searchResultsView = document.querySelector('[data-view="search-results"]');
 var $form = document.querySelector('form');
 var $searchInput = document.querySelector('input');
-var $resultsList = document.querySelector('.suggestions');
+var $usggestionsView = document.querySelector('[data-view="suggestions"]');
+var $suggestions = document.querySelector('.suggestions');
 var $closeButton = document.querySelector('.exit-button');
 
 var $backLinkToFeatured = document.querySelector('.back-to-featured');
@@ -63,7 +63,7 @@ function getData(url) {
       currentDetail.slug = xhr.response.slug;
       fillDetail(xhr.response);
     } else if (view === 'search') {
-      $searchResultsView.hidden = false;
+      $usggestionsView.hidden = false;
       timeoutId = null;
       renderResults(xhr.response.results);
     }
@@ -158,9 +158,9 @@ function fillDetail(object) {
   });
 
   if (indexOfBookmark === -1) {
-    $bookmarkIconDetail.className = 'bookmark-action far fa-bookmark';
+    $bookmarkAction.className = 'bookmark-action far fa-bookmark';
   } else {
-    $bookmarkIconDetail.className = 'bookmark-action fas fa-bookmark';
+    $bookmarkAction.className = 'bookmark-action fas fa-bookmark';
   }
 }
 
@@ -183,19 +183,19 @@ function toggleModal(event) {
   }
 
   $searchInput.value = null;
-  $resultsList.replaceChildren();
-  $searchResultsView.hidden = true;
+  $suggestions.replaceChildren();
+  $usggestionsView.hidden = true;
 }
 
 function renderResults(array) {
-  $resultsList.replaceChildren();
+  $suggestions.replaceChildren();
 
   for (var i = 0; i < array.length; i++) {
     if (i === 10) {
       return;
     }
 
-    $resultsList.appendChild(
+    $suggestions.appendChild(
       generateDomTree('li', {},
         [generateDomTree('a', {
           href: '#',
@@ -217,8 +217,8 @@ $cards.addEventListener('click', function (event) {
 
 $backButton.addEventListener('click', function (event) {
   pageNumber--;
-  $pageNumberTop.textContent = pageNumber;
-  $pageNumberBot.textContent = pageNumber;
+  $pageNumTop.textContent = pageNumber;
+  $pageNumBot.textContent = pageNumber;
   $nextButton.hidden = false;
   window.scrollTo({ top: 0, behavior: 'smooth' });
   getData(previousUrl);
@@ -230,8 +230,8 @@ $backButton.addEventListener('click', function (event) {
 
 $nextButton.addEventListener('click', function (event) {
   pageNumber++;
-  $pageNumberTop.textContent = pageNumber;
-  $pageNumberBot.textContent = pageNumber;
+  $pageNumTop.textContent = pageNumber;
+  $pageNumBot.textContent = pageNumber;
   $backButton.hidden = false;
   window.scrollTo({ top: 0, behavior: 'smooth' });
   getData(nextUrl);
@@ -248,10 +248,10 @@ function toFeatured(event) {
   getData();
 }
 
-$backLinkDetail.addEventListener('click', toFeatured);
-$backLinkFeatured.addEventListener('click', toFeatured);
+$backLinkDet.addEventListener('click', toFeatured);
+$backLinkFeat.addEventListener('click', toFeatured);
 
-$topLink.addEventListener('click', function (event) {
+$topLinkDet.addEventListener('click', function (event) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
@@ -269,7 +269,7 @@ $searchInput.addEventListener('keyup', function (event) {
   }
 });
 
-$resultsList.addEventListener('click', function (event) {
+$suggestions.addEventListener('click', function (event) {
   if (event.target.matches('a')) {
     view = 'detail';
     $featuredView.hidden = true;
@@ -296,9 +296,9 @@ $backLinkToFeatured.addEventListener('click', function (event) {
   $viewLabel.textContent = 'Featured';
   $backLinkToFeatured.hidden = true;
   $pageLabel.hidden = false;
-  $pageNumberTop.hidden = false;
+  $pageNumTop.hidden = false;
   $backButton.hidden = true;
-  $pageNumberBot.hidden = false;
+  $pageNumBot.hidden = false;
   $nextButton.hidden = false;
   $cards.replaceChildren();
   getData(domain + key + pageParam + pageNumber.toString());
@@ -311,23 +311,23 @@ $bookmarkIconHeader.addEventListener('click', function (event) {
   $featuredView.hidden = false;
   $detailView.hidden = true;
   $pageLabel.hidden = true;
-  $pageNumberTop.hidden = true;
+  $pageNumTop.hidden = true;
   $backButton.hidden = true;
-  $pageNumberBot.hidden = true;
+  $pageNumBot.hidden = true;
   $nextButton.hidden = true;
   renderCards(data.bookmarks);
 });
 
-$bookmarkIconDetail.addEventListener('click', function (event) {
+$bookmarkAction.addEventListener('click', function (event) {
   var indexOfBookmark = data.bookmarks.findIndex(function (object) {
     return object.slug === currentDetail.slug;
   });
 
   if (indexOfBookmark === -1) {
-    $bookmarkIconDetail.className = 'bookmark-action fas fa-bookmark';
+    $bookmarkAction.className = 'bookmark-action fas fa-bookmark';
     data.bookmarks.push(currentDetail);
   } else {
-    $bookmarkIconDetail.className = 'bookmark-action far fa-bookmark';
+    $bookmarkAction.className = 'bookmark-action far fa-bookmark';
     data.bookmarks.splice(indexOfBookmark, 1);
   }
 });

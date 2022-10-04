@@ -30,7 +30,7 @@
     <section class="container" data-view="featured">
       <div class="row">
         <div class="col-100">
-          <div class="back-to-featured link-wrapper-back" hidden>
+          <div class="back-to-featured back-link-wrapper" hidden>
             <a class="back-arrow-featured"><span class="fas fa-angle-left"></span>Back</a>
           </div>
         </div>
@@ -63,7 +63,7 @@
     </section>
     <section class="container" data-view="detail" hidden>
       <div class="row">
-        <div class="col-100 link-wrapper-back">
+        <div class="back-link-wrapper col-100">
           <a class="back-arrow-detail"><span class="fas fa-angle-left"></span>Back</a>
         </div>
       </div>
@@ -130,49 +130,37 @@
         </div>
       </div>
       <div class="row flex-center">
-        <div class="link-wrapper-top col-100 text-center">
+        <div class="top-link-wrapper col-100 text-center">
           <a class="up-arrow"><span class="arrow-icon fas fa-angle-up"></span>Top</a>
         </div>
       </div>
     </section>
-
-
-
-
     <section data-view="search" hidden>
       <div class="modal-overlay">
-        <div class="modal">
-          <form class="container">
-            <div class="row">
-              <div class="col-85">
-                <input type="text" placeholder="Search...">
-              </div>
-              <div class="col-15">
-                <button class="submit-button" type="submit">
-                  <span class="fas fa-magnifying-glass"></span>
-                </button>
-              </div>
+        <div class="modal container">
+          <form class="row">
+            <div class="col-85">
+              <input type="text" placeholder="Search...">
+            </div>
+            <div class="col-15">
+              <button class="submit-button" type="submit">
+                <span class="fas fa-magnifying-glass"></span>
+              </button>
             </div>
           </form>
-          <div class="container" data-view="search-results" hidden>
-            <div class="results row">
-              <div class="col-100">
-                <ul class="results-list"></ul>
-              </div>
+          <div class="row">
+            <div class="suggestions-wrapper col-100" data-view="search-results" hidden>
+              <ul class="suggestions"></ul>
             </div>
           </div>
-          <div class="row text-center">
-            <div class="col-100">
-              <button class="close-button">Back</button>
+          <div class="row">
+            <div class="col-100 text-center">
+              <button class="exit-button">Exit</button>
             </div>
           </div>
         </div>
       </div>
     </section>
-
-
-
-
   </main>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>

@@ -36,8 +36,8 @@ var $searchView = document.querySelector('[data-view="search"]');
 var $searchResultsView = document.querySelector('[data-view="search-results"]');
 var $form = document.querySelector('form');
 var $searchInput = document.querySelector('input');
-var $resultsList = document.querySelector('.results-list');
-var $closeButton = document.querySelector('.close-button');
+var $resultsList = document.querySelector('.suggestions');
+var $closeButton = document.querySelector('.exit-button');
 
 var $backLinkToFeatured = document.querySelector('.back-to-featured');
 

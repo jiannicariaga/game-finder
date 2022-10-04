@@ -42,7 +42,8 @@ a:hover {
 }
 
 .back-arrow-featured > span,
-.back-arrow-detail > span {
+.back-arrow-detail > span,
+.up-arrow > span {
   padding-right: 0.25rem;
 }
 
@@ -150,7 +151,7 @@ li {
 
 .back-button,
 .next-button,
-.close-button,
+.exit-button,
 .submit-button {
   color: #fff;
   background-color: #5667a6;
@@ -173,22 +174,22 @@ li {
   font-size: 1rem;
 }
 
-.close-button {
+.exit-button {
   margin-top: 35px;
 }
 
 .back-button:hover,
 .next-button:hover,
 .submit-button:hover,
-.close-button:hover {
+.exit-button:hover {
   cursor: pointer;
 }
 
-.link-wrapper-back {
+.back-link-wrapper {
   padding-top: 19.2px;
 }
 
-.link-wrapper-top {
+.top-link-wrapper {
   padding: 19.2px 0;
 }
 
@@ -225,7 +226,7 @@ input:focus {
   outline: none;
 }
 
-.results {
+.suggestions-wrapper {
   background-color: #fff;
   border-radius: 10px;
   padding: 0 1rem;
@@ -234,7 +235,7 @@ input:focus {
   overflow: hidden;
 }
 
-.results-list a {
+.suggestions a {
   color: #5667a6;
   font-size: 1rem;
   font-weight: 700;

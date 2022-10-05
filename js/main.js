@@ -3,10 +3,11 @@ var key = '?key=76e41dc99b8042e0b6f0cd116d9dadc1';
 var pageParam = '&page=';
 var searchParam = '&search=';
 var view = 'featured';
-var pageNumber = 1;
-var previousUrl = null;
-var nextUrl = null;
 var previousView = null;
+var previousPageUrl = null;
+var nextPageUrl = null;
+var pageNumberFeat = 1;
+var pageNumberResults = 1;
 var timeoutId = null;
 var currentDetail = {
   background_image: null,
@@ -17,9 +18,9 @@ var placeholderImage = 'https://via.placeholder.com/200x200.jpg?text=+';
 
 var $bookmarkIconHeader = document.querySelector('.bookmarks');
 var $searchIcon = document.querySelector('.search');
-
 var $featuredView = document.querySelector('[data-view="featured"]');
-var $backLinkFeat = document.querySelector('.back-arrow-featured');
+var $backLinkView = document.querySelector('[data-view="back-link"]');
+var $backLinkFeat = document.querySelector('.back-arrow-feat');
 var $viewLabel = document.querySelector('.view-label');
 var $pageLabel = document.querySelector('.page-label');
 var $pageNumTop = document.querySelector('.page-number-top');
@@ -27,20 +28,16 @@ var $featuredGames = document.querySelector('.featured-games');
 var $backButton = document.querySelector('.back-button');
 var $pageNumBot = document.querySelector('.page-number-bot');
 var $nextButton = document.querySelector('.next-button');
-
 var $detailView = document.querySelector('[data-view="detail"]');
 var $backLinkDetail = document.querySelector('.back-arrow-detail');
 var $bookmarkAction = document.querySelector('.bookmark-action');
 var $topLinkDetail = document.querySelector('.up-arrow');
-
 var $searchView = document.querySelector('[data-view="search"]');
 var $form = document.querySelector('form');
 var $input = document.querySelector('input');
 var $suggestionsView = document.querySelector('[data-view="suggestions"]');
 var $suggestions = document.querySelector('.suggestions');
 var $exitButton = document.querySelector('.exit-button');
-
-var $backLinkToFeatured = document.querySelector('.back-to-featured');
 
 function getData(url, task) {
   var xhr = new XMLHttpRequest();
@@ -49,37 +46,6 @@ function getData(url, task) {
   xhr.addEventListener('load', function (event) { task(xhr.response); });
   xhr.send();
 }
-
-// function getData(url) {
-//   var xhr = new XMLHttpRequest();
-
-//   if (view === 'featured' && previousView !== 'search') {
-//     xhr.open('GET', domain + key + pageParam + pageNumber.toString());
-//   } else {
-//     xhr.open('GET', url);
-//   }
-
-//   xhr.responseType = 'json';
-
-//   xhr.addEventListener('load', function (event) {
-//     if (view === 'featured') {
-//       previousUrl = xhr.response.previous;
-//       nextUrl = xhr.response.next;
-//       renderCards(xhr.response.results);
-//     } else if (view === 'detail') {
-//       currentDetail.background_image = xhr.response.background_image;
-//       currentDetail.name = xhr.response.name;
-//       currentDetail.slug = xhr.response.slug;
-//       fillCardDetail(xhr.response);
-//     } else if (view === 'search') {
-//       $suggestionsView.hidden = false;
-//       timeoutId = null;
-//       renderResults(xhr.response.results);
-//     }
-//   });
-
-//   xhr.send();
-// }
 
 function createDomTree(tagName, attributes, children) {
   var $element = document.createElement(tagName);
@@ -110,6 +76,8 @@ function createDomTree(tagName, attributes, children) {
 // FEATURED VIEW
 function renderCards(object) {
   $featuredGames.replaceChildren();
+  previousPageUrl = object.previous;
+  nextPageUrl = object.next;
 
   for (var i = 0; i < object.results.length; i++) {
     $featuredGames.appendChild(
@@ -133,6 +101,46 @@ function renderCards(object) {
                 })])])])])]));
   }
 }
+
+$backButton.addEventListener('click', function (event) {
+  getData(previousPageUrl, renderCards);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  $nextButton.hidden = false;
+
+  if (view === 'featured') {
+    pageNumberFeat--;
+    $pageNumTop.textContent = pageNumberFeat;
+    $pageNumBot.textContent = pageNumberFeat;
+  } else if (view === 'results') {
+    pageNumberResults--;
+    $pageNumTop.textContent = pageNumberResults;
+    $pageNumBot.textContent = pageNumberResults;
+  }
+
+  if (pageNumberFeat === 1 || pageNumberResults === 1) {
+    $backButton.hidden = true;
+  }
+});
+
+$nextButton.addEventListener('click', function (event) {
+  getData(nextPageUrl, renderCards);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  $backButton.hidden = false;
+
+  if (view === 'featured') {
+    pageNumberFeat++;
+    $pageNumTop.textContent = pageNumberFeat;
+    $pageNumBot.textContent = pageNumberFeat;
+  } else if (view === 'results') {
+    pageNumberResults++;
+    $pageNumTop.textContent = pageNumberResults;
+    $pageNumBot.textContent = pageNumberResults;
+  }
+
+  if (nextPageUrl === null) {
+    $nextButton.hidden = true;
+  }
+});
 
 // DETAIL VIEW
 function renderDetailList(parentElement, array) {
@@ -164,6 +172,9 @@ function fillDetail(object) {
   renderDetailList($genre, object.genres);
   renderDetailList($developer, object.developers);
   renderDetailList($publisher, object.publishers);
+  currentDetail.background_image = object.background_image;
+  currentDetail.name = object.name;
+  currentDetail.slug = object.slug;
 
   if (object.esrb_rating !== null) {
     $esrbRating.textContent = object.esrb_rating.name;
@@ -171,16 +182,16 @@ function fillDetail(object) {
     $esrbRating.textContent = '';
   }
 
-  // var indexOfBookmark = data.bookmarks.findIndex(function (object) {
-  //   return object.slug === currentDetail.slug;
-  // });
+  var index = data.bookmarks.findIndex(function (object) {
+    return object.slug === currentDetail.slug;
+  });
 
-  // if (indexOfBookmark === -1) {
-  //   $bookmarkAction.className = 'bookmark-action far fa-bookmark';
-  // } else {
-  //   $bookmarkAction.className = 'bookmark-action fas fa-bookmark';
-  // }
-} // fix
+  if (index === -1) {
+    $bookmarkAction.className = 'bookmark-action far fa-bookmark';
+  } else {
+    $bookmarkAction.className = 'bookmark-action fas fa-bookmark';
+  }
+}
 
 $featuredGames.addEventListener('click', function (event) {
   if (event.target.closest('.card-featured')) {
@@ -193,7 +204,7 @@ $featuredGames.addEventListener('click', function (event) {
 });
 
 // SEARCH VIEW
-function renderResults(object) {
+function renderSuggestions(object) {
   $suggestions.replaceChildren();
 
   for (var i = 0; i < object.results.length; i++) {
@@ -215,11 +226,11 @@ $input.addEventListener('keyup', function (event) {
   if (event && timeoutId !== null) {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(function () {
-      getData(domain + key + searchParam + $input.value, renderResults);
+      getData(domain + key + searchParam + $input.value, renderSuggestions);
     }, 500);
   } else {
     timeoutId = setTimeout(function () {
-      getData(domain + key + searchParam + $input.value, renderResults);
+      getData(domain + key + searchParam + $input.value, renderSuggestions);
     }, 500);
   }
 
@@ -239,11 +250,16 @@ $form.addEventListener('submit', function (event) {
   event.preventDefault();
   getData(domain + key + searchParam + $input.value, renderCards);
   $viewLabel.textContent = 'Search Results';
-  $backLinkToFeatured.hidden = false;
+  pageNumberResults = 1;
+  $pageNumTop.textContent = pageNumberResults;
+  $pageNumBot.textContent = pageNumberResults;
+  $backLinkView.hidden = false;
+  $backButton.hidden = true;
   $featuredView.hidden = false;
   $detailView.hidden = true;
   $searchView.hidden = true;
-}); // fix
+  view = 'results';
+});
 
 function toggleModal(event) {
   if (view !== 'search') {
@@ -263,88 +279,105 @@ function toggleModal(event) {
 $searchIcon.addEventListener('click', toggleModal);
 $exitButton.addEventListener('click', toggleModal);
 
+// BOOKMARKS VIEW
+function renderBookmarks(array) {
+  $featuredGames.replaceChildren();
+
+  for (var i = 0; i < array.length; i++) {
+    $featuredGames.appendChild(
+      createDomTree('div', { class: 'card-wrapper col-50' }, [
+        createDomTree('div', {
+          class: 'card-featured row',
+          'data-url': domain + '/' + array[i].slug + key
+        }, [
+          createDomTree('div', { class: 'col-100' }, [
+            createDomTree('div', { class: 'row' }, [
+              createDomTree('div', { class: 'card-thumbnail-featured col-100' }, [
+                createDomTree('img', {
+                  src: array[i].background_image,
+                  alt: array[i].name
+                })])]),
+            createDomTree('div', { class: 'row' }, [
+              createDomTree('div', { class: 'card-title-featured col-100' }, [
+                createDomTree('h4', {
+                  class: 'text-center',
+                  textContent: array[i].name
+                })])])])])]));
+  }
+}
+
+$bookmarkIconHeader.addEventListener('click', function (event) {
+  renderBookmarks(data.bookmarks);
+  $viewLabel.textContent = 'Bookmarks';
+  $pageLabel.hidden = true;
+  $pageNumTop.hidden = true;
+  $backButton.hidden = true;
+  $pageNumBot.hidden = true;
+  $nextButton.hidden = true;
+  $backLinkView.hidden = false;
+  $featuredView.hidden = false;
+  $detailView.hidden = true;
+  view = 'bookmarks';
+});
+
+$bookmarkAction.addEventListener('click', function (event) {
+  var index = data.bookmarks.findIndex(function (object) {
+    return object.slug === currentDetail.slug;
+  });
+
+  if (index === -1) {
+    $bookmarkAction.className = 'bookmark-action fas fa-bookmark';
+    data.bookmarks.push(currentDetail);
+  } else {
+    $bookmarkAction.className = 'bookmark-action far fa-bookmark';
+    data.bookmarks.splice(index, 1);
+  }
+});
+
 // NAVIGATION
+function goToFeatured(event) {
+  $featuredGames.replaceChildren();
+  getData(domain + key + pageParam + pageNumberFeat, renderCards);
 
-// $backButton.addEventListener('click', function (event) {
-//   pageNumber--;
-//   $pageNumTop.textContent = pageNumber;
-//   $pageNumBot.textContent = pageNumber;
-//   $nextButton.hidden = false;
-//   window.scrollTo({ top: 0, behavior: 'smooth' });
-//   getData(previousUrl);
+  if (view === 'results') {
+    $backLinkView.hidden = true;
+    $pageNumBot.hidden = false;
+  }
 
-//   if (pageNumber === 1) {
-//     $backButton.hidden = true;
-//   }
-// });
+  if (view === 'detail' || view === 'bookmarks') {
+    $pageLabel.hidden = false;
+    $pageNumTop.hidden = false;
+    $pageNumBot.hidden = false;
+    $backLinkView.hidden = true;
+    $featuredView.hidden = false;
+    $detailView.hidden = true;
+  }
 
-// $nextButton.addEventListener('click', function (event) {
-//   pageNumber++;
-//   $pageNumTop.textContent = pageNumber;
-//   $pageNumBot.textContent = pageNumber;
-//   $backButton.hidden = false;
-//   window.scrollTo({ top: 0, behavior: 'smooth' });
-//   getData(nextUrl);
+  if (pageNumberFeat === 1) {
+    $backButton.hidden = true;
+  } else {
+    $backButton.hidden = false;
+  }
 
-//   if (nextUrl === null) {
-//     $nextButton.hidden = true;
-//   }
-// });
+  if (nextPageUrl === null) {
+    $nextButton.hidden = true;
+  } else {
+    $nextButton.hidden = false;
+  }
 
-// function toFeatured(event) {
-//   view = 'featured';
-//   $featuredView.hidden = false;
-//   $detailView.hidden = true;
-//   getData();
-// }
+  $viewLabel.textContent = 'Featured';
+  $pageNumTop.textContent = pageNumberFeat;
+  $pageNumBot.textContent = pageNumberFeat;
+  $featuredView.hidden = false;
+  $detailView.hidden = true;
+  view = 'featured';
+}
 
-// $backLinkDetail.addEventListener('click', toFeatured);
-// $backLinkFeat.addEventListener('click', toFeatured);
+$backLinkFeat.addEventListener('click', goToFeatured);
+$backLinkDetail.addEventListener('click', goToFeatured);
+$backLinkView.addEventListener('click', goToFeatured);
+$topLinkDetail.addEventListener('click', function (event) {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 
-// $topLinkDetail.addEventListener('click', function (event) {
-//   window.scrollTo({ top: 0, behavior: 'smooth' });
-// });
-
-// $backLinkToFeatured.addEventListener('click', function (event) {
-//   $viewLabel.textContent = 'Featured';
-//   $backLinkToFeatured.hidden = true;
-//   $pageLabel.hidden = false;
-//   $pageNumTop.hidden = false;
-//   $backButton.hidden = true;
-//   $pageNumBot.hidden = false;
-//   $nextButton.hidden = false;
-//   $featuredGames.replaceChildren();
-//   getData(domain + key + pageParam + pageNumber.toString());
-// });
-
-// $bookmarkIconHeader.addEventListener('click', function (event) {
-//   view = 'featured';
-//   $viewLabel.textContent = 'Bookmarks';
-//   $backLinkToFeatured.hidden = false;
-//   $featuredView.hidden = false;
-//   $detailView.hidden = true;
-//   $pageLabel.hidden = true;
-//   $pageNumTop.hidden = true;
-//   $backButton.hidden = true;
-//   $pageNumBot.hidden = true;
-//   $nextButton.hidden = true;
-//   renderCards(data.bookmarks);
-// });
-
-// $bookmarkAction.addEventListener('click', function (event) {
-//   var indexOfBookmark = data.bookmarks.findIndex(function (object) {
-//     return object.slug === currentDetail.slug;
-//   });
-
-//   if (indexOfBookmark === -1) {
-//     $bookmarkAction.className = 'bookmark-action fas fa-bookmark';
-//     data.bookmarks.push(currentDetail);
-//   } else {
-//     $bookmarkAction.className = 'bookmark-action far fa-bookmark';
-//     data.bookmarks.splice(indexOfBookmark, 1);
-//   }
-// });
-
-// getData();
-
-getData(domain + key + pageParam + pageNumber, renderCards);
+getData(domain + key + pageParam + pageNumberFeat, renderCards);

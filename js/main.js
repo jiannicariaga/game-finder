@@ -2,38 +2,37 @@ var domain = 'https://api.rawg.io/api/games';
 var key = '?key=76e41dc99b8042e0b6f0cd116d9dadc1';
 var pageParam = '&page=';
 var searchParam = '&search=';
-var view = 'featured';
+var placeholderImage = 'images/placeholder.jpg';
+var currentView = 'featured';
 var previousView = null;
 var previousPageUrl = null;
 var nextPageUrl = null;
-var pageNumberFeat = 1;
-var pageNumberResults = 1;
+var pageNumFeatured = 1;
+var pageNumResults = 1;
 var timeoutId = null;
 
-var placeholderImage = 'https://via.placeholder.com/200x200.jpg?text=+';
-
-var $bookmarkIconHeader = document.querySelector('.bookmarks');
-var $searchIcon = document.querySelector('.search');
 var $featuredView = document.querySelector('[data-view="featured"]');
 var $backLinkView = document.querySelector('[data-view="back-link"]');
-var $backLinkFeat = document.querySelector('.back-arrow-feat');
+var $detailView = document.querySelector('[data-view="detail"]');
+var $searchView = document.querySelector('[data-view="search"]');
+var $suggestionsView = document.querySelector('[data-view="suggestions"]');
 var $viewLabel = document.querySelector('.view-label');
 var $pageLabel = document.querySelector('.page-label');
-var $pageNumTop = document.querySelector('.page-number-top');
-var $featuredGames = document.querySelector('.featured-games');
-var $backButton = document.querySelector('.back-button');
-var $pageNumBot = document.querySelector('.page-number-bot');
-var $nextButton = document.querySelector('.next-button');
-var $detailView = document.querySelector('[data-view="detail"]');
+var $pageNumTop = document.querySelector('.page-num-top');
+var $pageNumBottom = document.querySelector('.page-num-bot');
+var $backButton = document.querySelector('.back-btn');
+var $nextButton = document.querySelector('.next-btn');
+var $exitButton = document.querySelector('.exit-btn');
+var $backLinkFeatured = document.querySelector('.back-arrow-feat');
 var $backLinkDetail = document.querySelector('.back-arrow-detail');
-var $bookmarkAction = document.querySelector('.bookmark-action');
 var $topLinkDetail = document.querySelector('.up-arrow');
-var $searchView = document.querySelector('[data-view="search"]');
+var $bookmarkIcon = document.querySelector('.bookmarks');
+var $bookmarkAction = document.querySelector('.bookmark-action');
+var $searchIcon = document.querySelector('.search');
 var $form = document.querySelector('form');
 var $input = document.querySelector('input');
-var $suggestionsView = document.querySelector('[data-view="suggestions"]');
 var $suggestions = document.querySelector('.suggestions');
-var $exitButton = document.querySelector('.exit-button');
+var $featuredGames = document.querySelector('.featured-games');
 
 function getData(url, task) {
   var xhr = new XMLHttpRequest();
@@ -43,7 +42,7 @@ function getData(url, task) {
   xhr.send();
 }
 
-function createDomTree(tagName, attributes, children) {
+function generateDomTree(tagName, attributes, children) {
   var $element = document.createElement(tagName);
 
   if (!children) {
@@ -69,7 +68,6 @@ function createDomTree(tagName, attributes, children) {
   return $element;
 }
 
-// FEATURED VIEW
 function renderCards(object) {
   $featuredGames.replaceChildren();
   previousPageUrl = object.previous;
@@ -77,75 +75,24 @@ function renderCards(object) {
 
   for (var i = 0; i < object.results.length; i++) {
     $featuredGames.appendChild(
-      createDomTree('div', { class: 'card-wrapper col-50' }, [
-        createDomTree('div', {
-          class: 'card-featured row',
+      generateDomTree('div', { class: 'card-wrapper col-50' }, [
+        generateDomTree('div', {
+          class: 'card-feat row',
           'data-url': domain + '/' + object.results[i].slug + key
         }, [
-          createDomTree('div', { class: 'col-100' }, [
-            createDomTree('div', { class: 'row' }, [
-              createDomTree('div', { class: 'card-thumbnail-featured col-100' }, [
-                createDomTree('img', {
+          generateDomTree('div', { class: 'col-100' }, [
+            generateDomTree('div', { class: 'row' }, [
+              generateDomTree('div', { class: 'card-feat-image col-100' }, [
+                generateDomTree('img', {
                   src: object.results[i].background_image,
                   alt: object.results[i].name
                 })])]),
-            createDomTree('div', { class: 'row' }, [
-              createDomTree('div', { class: 'card-title-featured col-100' }, [
-                createDomTree('h4', {
+            generateDomTree('div', { class: 'row' }, [
+              generateDomTree('div', { class: 'card-feat-title col-100' }, [
+                generateDomTree('h4', {
                   class: 'text-center',
                   textContent: object.results[i].name
                 })])])])])]));
-  }
-}
-
-$backButton.addEventListener('click', function (event) {
-  getData(previousPageUrl, renderCards);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  $nextButton.hidden = false;
-
-  if (view === 'featured') {
-    pageNumberFeat--;
-    $pageNumTop.textContent = pageNumberFeat;
-    $pageNumBot.textContent = pageNumberFeat;
-  } else if (view === 'results') {
-    pageNumberResults--;
-    $pageNumTop.textContent = pageNumberResults;
-    $pageNumBot.textContent = pageNumberResults;
-  }
-
-  if (pageNumberFeat === 1 || pageNumberResults === 1) {
-    $backButton.hidden = true;
-  }
-});
-
-$nextButton.addEventListener('click', function (event) {
-  getData(nextPageUrl, renderCards);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  $backButton.hidden = false;
-
-  if (view === 'featured') {
-    pageNumberFeat++;
-    $pageNumTop.textContent = pageNumberFeat;
-    $pageNumBot.textContent = pageNumberFeat;
-  } else if (view === 'results') {
-    pageNumberResults++;
-    $pageNumTop.textContent = pageNumberResults;
-    $pageNumBot.textContent = pageNumberResults;
-  }
-
-  if (nextPageUrl === null) {
-    $nextButton.hidden = true;
-  }
-});
-
-// DETAIL VIEW
-function renderDetailList(parentElement, array) {
-  parentElement.replaceChildren();
-
-  for (var i = 0; i < array.length; i++) {
-    parentElement.appendChild(
-      createDomTree('li', { textContent: array[i].name })
-    );
   }
 }
 
@@ -168,7 +115,6 @@ function fillDetail(object) {
   renderDetailList($genre, object.genres);
   renderDetailList($developer, object.developers);
   renderDetailList($publisher, object.publishers);
-
   data.currentDetail = {
     background_image: object.background_image,
     name: object.name,
@@ -192,18 +138,16 @@ function fillDetail(object) {
   }
 }
 
-$featuredGames.addEventListener('click', function (event) {
-  if (event.target.closest('.card-featured')) {
-    $bookmarkAction.className = 'bookmark-action far fa-bookmark';
-    getData(event.target.closest('.card-featured').getAttribute('data-url'), fillDetail);
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    $featuredView.hidden = true;
-    $detailView.hidden = false;
-    view = 'detail';
-  }
-});
+function renderDetailList(parentElement, array) {
+  parentElement.replaceChildren();
 
-// SEARCH VIEW
+  for (var i = 0; i < array.length; i++) {
+    parentElement.appendChild(
+      generateDomTree('li', { textContent: array[i].name })
+    );
+  }
+}
+
 function renderSuggestions(object) {
   $suggestions.replaceChildren();
 
@@ -213,14 +157,143 @@ function renderSuggestions(object) {
     }
 
     $suggestions.appendChild(
-      createDomTree('li', {}, [
-        createDomTree('a', {
+      generateDomTree('li', {}, [
+        generateDomTree('a', {
           href: '#',
           'data-url': domain + '/' + object.results[i].slug + key,
           textContent: object.results[i].name
         })]));
   }
 }
+
+function renderBookmarks(array) {
+  $featuredGames.replaceChildren();
+
+  for (var i = 0; i < array.length; i++) {
+    $featuredGames.appendChild(
+      generateDomTree('div', { class: 'card-wrapper col-50' }, [
+        generateDomTree('div', {
+          class: 'card-feat row',
+          'data-url': domain + '/' + array[i].slug + key
+        }, [
+          generateDomTree('div', { class: 'col-100' }, [
+            generateDomTree('div', { class: 'row' }, [
+              generateDomTree('div', { class: 'card-feat-image col-100' }, [
+                generateDomTree('img', {
+                  src: array[i].background_image,
+                  alt: array[i].name
+                })])]),
+            generateDomTree('div', { class: 'row' }, [
+              generateDomTree('div', { class: 'card-feat-title col-100' }, [
+                generateDomTree('h4', {
+                  class: 'text-center',
+                  textContent: array[i].name
+                })])])])])]));
+  }
+}
+
+function toggleModal(event) {
+  if (currentView !== 'search') {
+    $searchView.style.display = 'revert';
+    previousView = currentView;
+    currentView = 'search';
+  } else {
+    $searchView.style.display = 'none';
+    currentView = previousView;
+  }
+
+  $suggestions.replaceChildren();
+  $suggestionsView.style.display = 'none';
+  $input.value = null;
+}
+
+function goToFeatured() {
+  $featuredGames.replaceChildren();
+  getData(domain + key + pageParam + pageNumFeatured, renderCards);
+
+  if (currentView === 'results') {
+    $backLinkView.style.display = 'none';
+    $pageNumBottom.style.display = 'revert';
+  }
+
+  if (currentView === 'detail' || currentView === 'bookmarks') {
+    $pageLabel.style.display = 'revert';
+    $pageNumTop.style.display = 'revert';
+    $pageNumBottom.style.display = 'revert';
+    $backLinkView.style.display = 'none';
+    $featuredView.style.display = 'revert';
+    $detailView.style.display = 'none';
+  }
+
+  if (pageNumFeatured === 1) {
+    $backButton.style.display = 'none';
+  } else {
+    $backButton.style.display = 'revert';
+  }
+
+  if (nextPageUrl === null) {
+    $nextButton.style.display = 'none';
+  } else {
+    $nextButton.style.display = 'revert';
+  }
+
+  $viewLabel.textContent = 'Featured';
+  $pageNumTop.textContent = pageNumFeatured;
+  $pageNumBottom.textContent = pageNumFeatured;
+  $featuredView.style.display = 'revert';
+  $detailView.style.display = 'none';
+  currentView = 'featured';
+}
+
+$featuredGames.addEventListener('click', function (event) {
+  if (event.target.closest('.card-feat')) {
+    getData(event.target.closest('.card-feat').getAttribute('data-url'), fillDetail);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    $featuredView.style.display = 'none';
+    $detailView.style.display = 'revert';
+    currentView = 'detail';
+  }
+});
+
+$backButton.addEventListener('click', function (event) {
+  getData(previousPageUrl, renderCards);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  $nextButton.style.display = 'revert';
+
+  if (currentView === 'featured') {
+    pageNumFeatured--;
+    $pageNumTop.textContent = pageNumFeatured;
+    $pageNumBottom.textContent = pageNumFeatured;
+  } else if (currentView === 'results') {
+    pageNumResults--;
+    $pageNumTop.textContent = pageNumResults;
+    $pageNumBottom.textContent = pageNumResults;
+  }
+
+  if (pageNumFeatured === 1 || pageNumResults === 1) {
+    $backButton.style.display = 'none';
+  }
+});
+
+$nextButton.addEventListener('click', function (event) {
+  getData(nextPageUrl, renderCards);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  $backButton.style.display = 'revert';
+
+  if (currentView === 'featured') {
+    pageNumFeatured++;
+    $pageNumTop.textContent = pageNumFeatured;
+    $pageNumBottom.textContent = pageNumFeatured;
+  } else if (currentView === 'results') {
+    pageNumResults++;
+    $pageNumTop.textContent = pageNumResults;
+    $pageNumBottom.textContent = pageNumResults;
+  }
+
+  if (nextPageUrl === null) {
+    $nextButton.style.display = 'none';
+  }
+});
 
 $input.addEventListener('keyup', function (event) {
   if (event && timeoutId !== null) {
@@ -234,15 +307,16 @@ $input.addEventListener('keyup', function (event) {
     }, 500);
   }
 
-  $suggestionsView.hidden = false;
+  $suggestionsView.style.display = 'revert';
 });
 
 $suggestions.addEventListener('click', function (event) {
   if (event.target.matches('a')) {
     getData(event.target.getAttribute('data-url'), fillDetail);
-    $featuredView.hidden = true;
-    $detailView.hidden = false;
-    $searchView.hidden = true;
+    $featuredView.style.display = 'none';
+    $detailView.style.display = 'revert';
+    $searchView.style.display = 'none';
+    currentView = 'detail';
   }
 });
 
@@ -250,74 +324,32 @@ $form.addEventListener('submit', function (event) {
   event.preventDefault();
   getData(domain + key + searchParam + $input.value, renderCards);
   $viewLabel.textContent = 'Search Results';
-  pageNumberResults = 1;
-  $pageNumTop.textContent = pageNumberResults;
-  $pageNumBot.textContent = pageNumberResults;
-  $backLinkView.hidden = false;
-  $backButton.hidden = true;
-  $featuredView.hidden = false;
-  $detailView.hidden = true;
-  $searchView.hidden = true;
-  view = 'results';
+  pageNumResults = 1;
+  $pageNumTop.textContent = pageNumResults;
+  $pageNumBottom.textContent = pageNumResults;
+  $backLinkView.style.display = 'revert';
+  $pageLabel.style.display = 'revert';
+  $backButton.style.display = 'none';
+  $pageNumBottom.style.display = 'revert';
+  $nextButton.style.display = 'revert';
+  $featuredView.style.display = 'revert';
+  $detailView.style.display = 'none';
+  $searchView.style.display = 'none';
+  currentView = 'results';
 });
 
-function toggleModal(event) {
-  if (view !== 'search') {
-    $searchView.hidden = false;
-    previousView = view;
-    view = 'search';
-  } else {
-    $searchView.hidden = true;
-    view = previousView;
-  }
-
-  $input.value = null;
-  $suggestions.replaceChildren();
-  $suggestionsView.hidden = true;
-}
-
-$searchIcon.addEventListener('click', toggleModal);
-$exitButton.addEventListener('click', toggleModal);
-
-// BOOKMARKS VIEW
-function renderBookmarks(array) {
-  $featuredGames.replaceChildren();
-
-  for (var i = 0; i < array.length; i++) {
-    $featuredGames.appendChild(
-      createDomTree('div', { class: 'card-wrapper col-50' }, [
-        createDomTree('div', {
-          class: 'card-featured row',
-          'data-url': domain + '/' + array[i].slug + key
-        }, [
-          createDomTree('div', { class: 'col-100' }, [
-            createDomTree('div', { class: 'row' }, [
-              createDomTree('div', { class: 'card-thumbnail-featured col-100' }, [
-                createDomTree('img', {
-                  src: array[i].background_image,
-                  alt: array[i].name
-                })])]),
-            createDomTree('div', { class: 'row' }, [
-              createDomTree('div', { class: 'card-title-featured col-100' }, [
-                createDomTree('h4', {
-                  class: 'text-center',
-                  textContent: array[i].name
-                })])])])])]));
-  }
-}
-
-$bookmarkIconHeader.addEventListener('click', function (event) {
+$bookmarkIcon.addEventListener('click', function (event) {
   renderBookmarks(data.bookmarks);
   $viewLabel.textContent = 'Bookmarks';
-  $pageLabel.hidden = true;
-  $pageNumTop.hidden = true;
-  $backButton.hidden = true;
-  $pageNumBot.hidden = true;
-  $nextButton.hidden = true;
-  $backLinkView.hidden = false;
-  $featuredView.hidden = false;
-  $detailView.hidden = true;
-  view = 'bookmarks';
+  $pageLabel.style.display = 'none';
+  $pageNumTop.style.display = 'none';
+  $backButton.style.display = 'none';
+  $pageNumBottom.style.display = 'none';
+  $nextButton.style.display = 'none';
+  $backLinkView.style.display = 'revert';
+  $featuredView.style.display = 'revert';
+  $detailView.style.display = 'none';
+  currentView = 'bookmarks';
 });
 
 $bookmarkAction.addEventListener('click', function (event) {
@@ -334,50 +366,14 @@ $bookmarkAction.addEventListener('click', function (event) {
   }
 });
 
-// NAVIGATION
-function goToFeatured() {
-  $featuredGames.replaceChildren();
-  getData(domain + key + pageParam + pageNumberFeat, renderCards);
-
-  if (view === 'results') {
-    $backLinkView.hidden = true;
-    $pageNumBot.hidden = false;
-  }
-
-  if (view === 'detail' || view === 'bookmarks') {
-    $pageLabel.hidden = false;
-    $pageNumTop.hidden = false;
-    $pageNumBot.hidden = false;
-    $backLinkView.hidden = true;
-    $featuredView.hidden = false;
-    $detailView.hidden = true;
-  }
-
-  if (pageNumberFeat === 1) {
-    $backButton.hidden = true;
-  } else {
-    $backButton.hidden = false;
-  }
-
-  if (nextPageUrl === null) {
-    $nextButton.hidden = true;
-  } else {
-    $nextButton.hidden = false;
-  }
-
-  $viewLabel.textContent = 'Featured';
-  $pageNumTop.textContent = pageNumberFeat;
-  $pageNumBot.textContent = pageNumberFeat;
-  $featuredView.hidden = false;
-  $detailView.hidden = true;
-  view = 'featured';
-}
-
-$backLinkFeat.addEventListener('click', goToFeatured);
-$backLinkDetail.addEventListener('click', goToFeatured);
-$backLinkView.addEventListener('click', goToFeatured);
 $topLinkDetail.addEventListener('click', function (event) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-getData(domain + key + pageParam + pageNumberFeat, renderCards);
+$searchIcon.addEventListener('click', toggleModal);
+$exitButton.addEventListener('click', toggleModal);
+$backLinkFeatured.addEventListener('click', goToFeatured);
+$backLinkDetail.addEventListener('click', goToFeatured);
+$backLinkView.addEventListener('click', goToFeatured);
+
+getData(domain + key + pageParam + pageNumFeatured, renderCards);

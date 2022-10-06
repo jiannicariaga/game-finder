@@ -16,6 +16,7 @@ var $backLinkView = document.querySelector('[data-view="back-link"]');
 var $detailView = document.querySelector('[data-view="detail"]');
 var $searchView = document.querySelector('[data-view="search"]');
 var $suggestionsView = document.querySelector('[data-view="suggestions"]');
+var $loadView = document.querySelector('[data-view="load"]');
 var $viewLabel = document.querySelector('.view-label');
 var $pageLabel = document.querySelector('.page-label');
 var $pageNumTop = document.querySelector('.page-num-top');
@@ -38,8 +39,12 @@ function getData(url, task) {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', url);
   xhr.responseType = 'json';
-  xhr.addEventListener('load', function (event) { task(xhr.response); });
+  xhr.addEventListener('load', function (event) {
+    task(xhr.response);
+    $loadView.hidden = true;
+  });
   xhr.send();
+  $loadView.hidden = false;
 }
 
 function generateDomTree(tagName, attributes, children) {
@@ -270,7 +275,8 @@ $backButton.addEventListener('click', function (event) {
     $pageNumBottom.textContent = pageNumResults;
   }
 
-  if (pageNumFeatured === 1 || pageNumResults === 1) {
+  if ((currentView === 'featured' && pageNumFeatured === 1) ||
+      (currentView === 'results' && pageNumResults === 1)) {
     $backButton.hidden = true;
   }
 });

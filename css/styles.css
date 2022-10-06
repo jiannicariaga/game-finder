@@ -172,7 +172,7 @@ input:focus {
   outline: none;
 }
 
-.results {
+.suggestions-wrapper {
   background-color: #fff;
   border-radius: 10px;
   padding: 0 1rem;
@@ -181,7 +181,7 @@ input:focus {
   overflow: hidden;
 }
 
-.results-list a {
+.suggestions a {
   color: #5667a6;
   font-size: 1rem;
   font-weight: 700;

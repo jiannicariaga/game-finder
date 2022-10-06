@@ -162,7 +162,7 @@ li {
 }
 
 .modal {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -249,7 +249,8 @@ input:focus {
   overflow: hidden;
 }
 
-.suggestions a {
+.suggestions a,
+.no-matches {
   color: #5667a6;
   font-size: 1rem;
   font-weight: 700;

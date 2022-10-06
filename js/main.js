@@ -10,7 +10,6 @@ var nextPageUrl = null;
 var pageNumFeatured = 1;
 var pageNumResults = 1;
 var timeoutId = null;
-
 var $featuredView = document.querySelector('[data-view="featured"]');
 var $backLinkView = document.querySelector('[data-view="back-link"]');
 var $detailView = document.querySelector('[data-view="detail"]');
@@ -156,44 +155,58 @@ function renderDetailList(parentElement, array) {
 function renderSuggestions(object) {
   $suggestions.replaceChildren();
 
-  for (var i = 0; i < object.results.length; i++) {
-    if (i === 10) {
-      return;
-    }
-
+  if (object.results.length === 0) {
     $suggestions.appendChild(
-      generateDomTree('li', {}, [
-        generateDomTree('a', {
-          href: '#',
-          'data-url': domain + '/' + object.results[i].slug + key,
-          textContent: object.results[i].name
-        })]));
+      generateDomTree('li', {
+        class: 'no-matches',
+        textContent: 'No matches found.'
+      }));
+  } else {
+    for (var i = 0; i < object.results.length; i++) {
+      if (i === 10) {
+        return;
+      }
+
+      $suggestions.appendChild(
+        generateDomTree('li', {}, [
+          generateDomTree('a', {
+            'data-url': domain + '/' + object.results[i].slug + key,
+            textContent: object.results[i].name
+          })]));
+    }
   }
 }
 
 function renderBookmarks(array) {
   $featuredGames.replaceChildren();
 
-  for (var i = 0; i < array.length; i++) {
+  if (array.length === 0) {
     $featuredGames.appendChild(
-      generateDomTree('div', { class: 'card-wrapper col-50' }, [
-        generateDomTree('div', {
-          class: 'card-feat row',
-          'data-url': domain + '/' + array[i].slug + key
-        }, [
-          generateDomTree('div', { class: 'col-100' }, [
-            generateDomTree('div', { class: 'row' }, [
-              generateDomTree('div', { class: 'card-feat-image col-100' }, [
-                generateDomTree('img', {
-                  src: array[i].background_image,
-                  alt: array[i].name
-                })])]),
-            generateDomTree('div', { class: 'row' }, [
-              generateDomTree('div', { class: 'card-feat-title col-100' }, [
-                generateDomTree('h4', {
-                  class: 'text-center',
-                  textContent: array[i].name
-                })])])])])]));
+      generateDomTree('div', { class: 'col-100 text-center' }, [
+        generateDomTree('p', { textContent: 'No bookmarks have been saved.' })
+      ]));
+  } else {
+    for (var i = 0; i < array.length; i++) {
+      $featuredGames.appendChild(
+        generateDomTree('div', { class: 'card-wrapper col-50' }, [
+          generateDomTree('div', {
+            class: 'card-feat row',
+            'data-url': domain + '/' + array[i].slug + key
+          }, [
+            generateDomTree('div', { class: 'col-100' }, [
+              generateDomTree('div', { class: 'row' }, [
+                generateDomTree('div', { class: 'card-feat-image col-100' }, [
+                  generateDomTree('img', {
+                    src: array[i].background_image,
+                    alt: array[i].name
+                  })])]),
+              generateDomTree('div', { class: 'row' }, [
+                generateDomTree('div', { class: 'card-feat-title col-100' }, [
+                  generateDomTree('h4', {
+                    class: 'text-center',
+                    textContent: array[i].name
+                  })])])])])]));
+    }
   }
 }
 

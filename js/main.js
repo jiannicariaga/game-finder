@@ -194,16 +194,16 @@ function renderBookmarks(array) {
 
 function toggleModal(event) {
   if (currentView !== 'search') {
-    $searchView.style.display = 'revert';
+    $searchView.hidden = false;
     previousView = currentView;
     currentView = 'search';
   } else {
-    $searchView.style.display = 'none';
+    $searchView.hidden = true;
     currentView = previousView;
   }
 
   $suggestions.replaceChildren();
-  $suggestionsView.style.display = 'none';
+  $suggestionsView.hidden = true;
   $input.value = null;
 }
 
@@ -212,36 +212,36 @@ function goToFeatured() {
   getData(domain + key + pageParam + pageNumFeatured, renderCards);
 
   if (currentView === 'results') {
-    $backLinkView.style.display = 'none';
-    $pageNumBottom.style.display = 'revert';
+    $backLinkView.hidden = true;
+    $pageNumBottom.hidden = false;
   }
 
   if (currentView === 'detail' || currentView === 'bookmarks') {
-    $pageLabel.style.display = 'revert';
-    $pageNumTop.style.display = 'revert';
-    $pageNumBottom.style.display = 'revert';
-    $backLinkView.style.display = 'none';
-    $featuredView.style.display = 'revert';
-    $detailView.style.display = 'none';
+    $pageLabel.hidden = false;
+    $pageNumTop.hidden = false;
+    $pageNumBottom.hidden = false;
+    $backLinkView.hidden = true;
+    $featuredView.hidden = false;
+    $detailView.hidden = true;
   }
 
   if (pageNumFeatured === 1) {
-    $backButton.style.display = 'none';
+    $backButton.hidden = true;
   } else {
-    $backButton.style.display = 'revert';
+    $backButton.hidden = false;
   }
 
   if (nextPageUrl === null) {
-    $nextButton.style.display = 'none';
+    $nextButton.hidden = true;
   } else {
-    $nextButton.style.display = 'revert';
+    $nextButton.hidden = false;
   }
 
   $viewLabel.textContent = 'Featured';
   $pageNumTop.textContent = pageNumFeatured;
   $pageNumBottom.textContent = pageNumFeatured;
-  $featuredView.style.display = 'revert';
-  $detailView.style.display = 'none';
+  $featuredView.hidden = false;
+  $detailView.hidden = true;
   currentView = 'featured';
 }
 
@@ -249,8 +249,8 @@ $featuredGames.addEventListener('click', function (event) {
   if (event.target.closest('.card-feat')) {
     getData(event.target.closest('.card-feat').getAttribute('data-url'), fillDetail);
     window.scrollTo({ top: 0, behavior: 'instant' });
-    $featuredView.style.display = 'none';
-    $detailView.style.display = 'revert';
+    $featuredView.hidden = true;
+    $detailView.hidden = false;
     currentView = 'detail';
   }
 });
@@ -258,7 +258,7 @@ $featuredGames.addEventListener('click', function (event) {
 $backButton.addEventListener('click', function (event) {
   getData(previousPageUrl, renderCards);
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  $nextButton.style.display = 'revert';
+  $nextButton.hidden = false;
 
   if (currentView === 'featured') {
     pageNumFeatured--;
@@ -271,14 +271,14 @@ $backButton.addEventListener('click', function (event) {
   }
 
   if (pageNumFeatured === 1 || pageNumResults === 1) {
-    $backButton.style.display = 'none';
+    $backButton.hidden = true;
   }
 });
 
 $nextButton.addEventListener('click', function (event) {
   getData(nextPageUrl, renderCards);
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  $backButton.style.display = 'revert';
+  $backButton.hidden = false;
 
   if (currentView === 'featured') {
     pageNumFeatured++;
@@ -291,7 +291,7 @@ $nextButton.addEventListener('click', function (event) {
   }
 
   if (nextPageUrl === null) {
-    $nextButton.style.display = 'none';
+    $nextButton.hidden = true;
   }
 });
 
@@ -307,15 +307,15 @@ $input.addEventListener('keyup', function (event) {
     }, 500);
   }
 
-  $suggestionsView.style.display = 'revert';
+  $suggestionsView.hidden = false;
 });
 
 $suggestions.addEventListener('click', function (event) {
   if (event.target.matches('a')) {
     getData(event.target.getAttribute('data-url'), fillDetail);
-    $featuredView.style.display = 'none';
-    $detailView.style.display = 'revert';
-    $searchView.style.display = 'none';
+    $featuredView.hidden = true;
+    $detailView.hidden = false;
+    $searchView.hidden = true;
     currentView = 'detail';
   }
 });
@@ -327,28 +327,28 @@ $form.addEventListener('submit', function (event) {
   pageNumResults = 1;
   $pageNumTop.textContent = pageNumResults;
   $pageNumBottom.textContent = pageNumResults;
-  $backLinkView.style.display = 'revert';
-  $pageLabel.style.display = 'revert';
-  $backButton.style.display = 'none';
-  $pageNumBottom.style.display = 'revert';
-  $nextButton.style.display = 'revert';
-  $featuredView.style.display = 'revert';
-  $detailView.style.display = 'none';
-  $searchView.style.display = 'none';
+  $backLinkView.hidden = false;
+  $pageLabel.hidden = false;
+  $backButton.hidden = true;
+  $pageNumBottom.hidden = false;
+  $nextButton.hidden = false;
+  $featuredView.hidden = false;
+  $detailView.hidden = true;
+  $searchView.hidden = true;
   currentView = 'results';
 });
 
 $bookmarkIcon.addEventListener('click', function (event) {
   renderBookmarks(data.bookmarks);
   $viewLabel.textContent = 'Bookmarks';
-  $pageLabel.style.display = 'none';
-  $pageNumTop.style.display = 'none';
-  $backButton.style.display = 'none';
-  $pageNumBottom.style.display = 'none';
-  $nextButton.style.display = 'none';
-  $backLinkView.style.display = 'revert';
-  $featuredView.style.display = 'revert';
-  $detailView.style.display = 'none';
+  $pageLabel.hidden = true;
+  $pageNumTop.hidden = true;
+  $backButton.hidden = true;
+  $pageNumBottom.hidden = true;
+  $nextButton.hidden = true;
+  $backLinkView.hidden = false;
+  $featuredView.hidden = false;
+  $detailView.hidden = true;
   currentView = 'bookmarks';
 });
 

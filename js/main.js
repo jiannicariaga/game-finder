@@ -2,7 +2,7 @@ var domain = 'https://api.rawg.io/api/games';
 var key = '?key=76e41dc99b8042e0b6f0cd116d9dadc1';
 var pageParam = '&page=';
 var searchParam = '&search=';
-var placeholderImage = 'images/placeholder.jpg';
+var placeholderImage = 'images/placeholder.webp';
 var currentView = 'featured';
 var previousView = null;
 var previousPageUrl = null;

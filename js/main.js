@@ -9,11 +9,7 @@ var nextPageUrl = null;
 var pageNumberFeat = 1;
 var pageNumberResults = 1;
 var timeoutId = null;
-var currentDetail = {
-  background_image: null,
-  name: null,
-  slug: null
-};
+
 var placeholderImage = 'https://via.placeholder.com/200x200.jpg?text=+';
 
 var $bookmarkIconHeader = document.querySelector('.bookmarks');
@@ -172,9 +168,12 @@ function fillDetail(object) {
   renderDetailList($genre, object.genres);
   renderDetailList($developer, object.developers);
   renderDetailList($publisher, object.publishers);
-  currentDetail.background_image = object.background_image;
-  currentDetail.name = object.name;
-  currentDetail.slug = object.slug;
+
+  data.currentDetail = {
+    background_image: object.background_image,
+    name: object.name,
+    slug: object.slug
+  };
 
   if (object.esrb_rating !== null) {
     $esrbRating.textContent = object.esrb_rating.name;
@@ -183,7 +182,7 @@ function fillDetail(object) {
   }
 
   var index = data.bookmarks.findIndex(function (object) {
-    return object.slug === currentDetail.slug;
+    return object.slug === data.currentDetail.slug;
   });
 
   if (index === -1) {
@@ -195,6 +194,7 @@ function fillDetail(object) {
 
 $featuredGames.addEventListener('click', function (event) {
   if (event.target.closest('.card-featured')) {
+    $bookmarkAction.className = 'bookmark-action far fa-bookmark';
     getData(event.target.closest('.card-featured').getAttribute('data-url'), fillDetail);
     window.scrollTo({ top: 0, behavior: 'instant' });
     $featuredView.hidden = true;
@@ -322,12 +322,12 @@ $bookmarkIconHeader.addEventListener('click', function (event) {
 
 $bookmarkAction.addEventListener('click', function (event) {
   var index = data.bookmarks.findIndex(function (object) {
-    return object.slug === currentDetail.slug;
+    return object.slug === data.currentDetail.slug;
   });
 
   if (index === -1) {
     $bookmarkAction.className = 'bookmark-action fas fa-bookmark';
-    data.bookmarks.push(currentDetail);
+    data.bookmarks.push(data.currentDetail);
   } else {
     $bookmarkAction.className = 'bookmark-action far fa-bookmark';
     data.bookmarks.splice(index, 1);
@@ -335,7 +335,7 @@ $bookmarkAction.addEventListener('click', function (event) {
 });
 
 // NAVIGATION
-function goToFeatured(event) {
+function goToFeatured() {
   $featuredGames.replaceChildren();
   getData(domain + key + pageParam + pageNumberFeat, renderCards);
 

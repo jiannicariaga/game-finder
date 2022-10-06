@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AJAX Project</title>
+  <title>GameFinder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -15,162 +15,162 @@
 <body>
   <header>
     <div class="container">
-      <div class="row flex-align-center flex-space-between">
+      <div class="row flex-center">
         <div class="col-70">
-          <h1>
-            <span class="fas fa-gamepad"></span> GameFinder
-          </h1>
+          <h1><span class="fas fa-gamepad"></span> GameFinder</h1>
         </div>
         <div class="col-30 text-right">
-          <span class="bookmark-icon-header fas fa-bookmark"></span>
-          <span class="search-icon fas fa-magnifying-glass"></span>
+          <a class="bookmarks"><span class="fas fa-bookmark"></span></a>
+          <a class="search"><span class="fas fa-magnifying-glass"></span></a>
         </div>
       </div>
     </div>
   </header>
   <main>
     <section class="container" data-view="featured">
-      <div class="back-to-featured flex-align-center link-back-padding" hidden>
+      <div class="row">
         <div class="col-100">
-          <a class="back-link-results" href="#">
-            <span class="arrow-icon fas fa-angle-left"></span>Back
-          </a>
+          <div class="back-link-wrapper" data-view="back-link" hidden>
+            <a class="back-arrow-feat">
+              <span class="fas fa-angle-left"></span>Back
+            </a>
+          </div>
         </div>
       </div>
-      <div class="row flex-align-center">
+      <div class="row flex-center">
         <div class="col-50">
           <h2 class="view-label">Featured</h2>
         </div>
         <div class="col-50">
-          <p class="page-label text-right">Page <span class="page-number-top">1</span></p>
+          <p class="page-label text-right">Page
+            <span class="page-num-top">1</span>
+          </p>
         </div>
       </div>
-      <div class="cards row flex-wrap"></div>
-      <div class="row flex-space-between flex-align-center">
-        <div class="col-33">
-          <button class="back-button" hidden>Back</button>
-        </div>
-        <div class="col-33 text-center">
-          <h2 class="page-number-bot">1</h2>
-        </div>
-        <div class="col-33 text-right">
-          <button class="next-button">Next</button>
+      <div class="featured-games row flex-wrap"></div>
+      <div class="row">
+        <div class="page-nav col-100">
+          <div class="row flex-center">
+            <div class="col-33">
+              <button class="back-btn" hidden>Back</button>
+            </div>
+            <div class="col-33 text-center">
+              <h2 class="page-num-bot">1</h2>
+            </div>
+            <div class="col-33 text-right">
+              <button class="next-btn">Next</button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
     <section class="container" data-view="detail" hidden>
       <div class="row">
+        <div class="back-link-wrapper col-100">
+          <a class="back-arrow-detail">
+            <span class="fas fa-angle-left"></span>Back
+          </a>
+        </div>
+      </div>
+      <div class="row">
         <div class="col-100">
-          <div class="row flex-align-center link-back-padding">
-            <div class="col-100">
-              <a class="back-link-detail" href="#">
-                <span class="arrow-icon fas fa-angle-left"></span>Back
-              </a>
+          <h2 class="title"></h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="card-detail col-100">
+          <div class="row">
+            <div class="banner-wrapper col-100">
+              <img class="banner" src="" alt="">
             </div>
           </div>
           <div class="row">
-            <div class="col-100">
-              <h2 class="title"></h2>
-            </div>
-          </div>
-          <div class="card-detail row">
-            <div class="col-100">
+            <div class="card-content-detail col-100">
               <div class="row">
-                <div class="card-thumbnail-detail col-100">
-                  <img class="thumbnail-detail" src="" alt="">
+                <div class="col-100">
+                  <div class="row flex-center">
+                    <div class="col-50">
+                      <h3>About</h3>
+                    </div>
+                    <div class="col-50 text-right">
+                      <a><span class="bookmark-action far fa-bookmark"></span></a>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-100">
+                      <p class="about"></p>
+                      <hr>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="container">
-                <div class="row">
-                  <div class="col-100">
-                    <div class="row flex-align-center">
-                      <div class="col-50">
-                        <h3>About</h3>
-                      </div>
-                      <div class="col-50 text-right">
-                        <span class="bookmark-icon-detail far fa-bookmark"></span>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-100">
-                        <p class="about"></p>
-                        <hr>
-                      </div>
-                    </div>
-                  </div>
+              <div class="meta-data row flex-wrap">
+                <div class="col-50">
+                  <h3>Genre</h3>
+                  <ul class="genre"></ul>
                 </div>
-                <div class="meta-data row flex-wrap">
-                  <div class="col-50">
-                    <h3>Genre</h3>
-                    <ul class="genre"></ul>
-                  </div>
-                  <div class="col-50">
-                    <h3>Release Date</h3>
-                    <ul>
-                      <li class="release-date"></li>
-                    </ul>
-                  </div>
-                  <div class="col-50">
-                    <h3>Developer</h3>
-                    <ul class="developer"></ul>
-                  </div>
-                  <div class="col-50">
-                    <h3>Publisher</h3>
-                    <ul class="publisher"></ul>
-                  </div>
-                  <div class="col-50">
-                    <h3>ESRB Rating</h3>
-                    <ul>
-                      <li class="esrb-rating"></li>
-                    </ul>
-                  </div>
-                  <div class="col-50">
-                    <h3>Website</h3>
-                    <ul>
-                      <li>
-                        <a class="website" href="#" target="_blank">Link</a>
-                      </li>
-                    </ul>
-                  </div>
+                <div class="col-50">
+                  <h3>Release Date</h3>
+                  <ul>
+                    <li class="release-date"></li>
+                  </ul>
+                </div>
+                <div class="col-50">
+                  <h3>Developer</h3>
+                  <ul class="developer"></ul>
+                </div>
+                <div class="col-50">
+                  <h3>Publisher</h3>
+                  <ul class="publisher"></ul>
+                </div>
+                <div class="col-50">
+                  <h3>ESRB Rating</h3>
+                  <ul>
+                    <li class="esrb-rating"></li>
+                  </ul>
+                </div>
+                <div class="col-50">
+                  <h3>Website</h3>
+                  <ul>
+                    <li>
+                      <a class="website" href="" target="_blank">Link</a>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
-          <div class="row flex-align-center text-center link-top-padding">
-            <div class="col-100">
-              <a class="top-link" href="#">
-                <span class="arrow-icon fas fa-angle-up"></span>Top
-              </a>
-            </div>
-          </div>
+        </div>
+      </div>
+      <div class="row flex-center">
+        <div class="top-link-wrapper col-100 text-center">
+          <a class="up-arrow">
+            <span class="arrow-icon fas fa-angle-up"></span>Top
+          </a>
         </div>
       </div>
     </section>
     <section data-view="search" hidden>
       <div class="modal-overlay">
-        <div class="modal">
-          <form class="container">
-            <div class="row">
-              <div class="col-85">
-                <input type="text" placeholder="Search...">
-              </div>
-              <div class="col-15">
-                <button class="submit-button" type="submit">
-                  <span class="fas fa-magnifying-glass"></span>
-                </button>
-              </div>
+        <div class="modal container">
+          <form class="row">
+            <div class="col-85">
+              <input type="text" placeholder="Search...">
+            </div>
+            <div class="col-15">
+              <button class="submit-btn" type="submit">
+                <span class="fas fa-magnifying-glass"></span>
+              </button>
             </div>
           </form>
-          <div class="container" data-view="search-results" hidden>
-            <div class="results row">
-              <div class="col-100">
-                <ul class="results-list"></ul>
-              </div>
+          <div class="row">
+            <div class="suggestions-wrapper col-100" data-view="suggestions" hidden>
+              <ul class="suggestions"></ul>
             </div>
           </div>
-          <div class="row text-center">
-            <div class="col-100">
-              <button class="close-button">Back</button>
+          <div class="row">
+            <div class="col-100 text-center">
+              <button class="exit-btn">Exit</button>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 .container {
-  padding: 0 0.5rem;
+  padding: 0 8px;
 }
 
 .row {
@@ -23,7 +23,7 @@
 }
 
 .col-33 {
-  flex-basis: 33%;
+  flex-basis: calc(100% / 3);
 }
 
 .col-30 {
@@ -34,16 +34,12 @@
   flex-basis: 15%;
 }
 
-.flex-align-center {
+.flex-center {
   align-items: center;
 }
 
 .flex-wrap {
   flex-wrap: wrap;
-}
-
-.flex-space-between {
-  justify-content: space-between;
 }
 
 .text-center {

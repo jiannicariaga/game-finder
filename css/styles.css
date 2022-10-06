@@ -9,6 +9,7 @@ header {
   top: 0;
   background-color: #5667a6;
   width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 }
 
 h1 {
@@ -21,11 +22,8 @@ a {
 }
 
 a:hover {
+  color: #7e97f2;
   cursor: pointer;
-  text-decoration: none;
-}
-
-.home {
   text-decoration: none;
 }
 
@@ -37,6 +35,11 @@ a:hover {
 
 .bookmarks {
   margin-right: 1rem;
+}
+
+.bookmarks:hover,
+.search:hover {
+  color: #c7d0f2;
 }
 
 .back-arrow-feat > span,
@@ -77,13 +80,17 @@ h3 {
 }
 
 .card-feat {
-  transition: margin 0.2s ease-in-out;
+  transition: margin 0.15s ease-in-out;
 }
 
 .card-feat:hover {
   background-color: #1e2124;
   cursor: pointer;
   margin-top: -4px;
+}
+
+.card-feat:active {
+  margin-top: -2px;
 }
 
 .card-feat-image,
@@ -206,6 +213,7 @@ input:focus {
   font-weight: 400;
   border: none;
   border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
   padding: 0.5rem 1.25rem;
 }
 
@@ -213,6 +221,7 @@ input:focus {
   width: 100%;
   height: 100%;
   border-radius: 0 20px 20px 0;
+  box-shadow: none;
   padding: 0;
 }
 
@@ -228,6 +237,7 @@ input:focus {
 .next-btn:hover,
 .submit-btn:hover,
 .exit-btn:hover {
+  background-color: #49588c;
   cursor: pointer;
 }
 
@@ -239,7 +249,7 @@ input:focus {
   padding: 19.2px 0;
 }
 
-@media only screen and (min-width: 426px) {
+@media only screen and (min-width: 768px) {
   .card-wrapper:nth-child(odd),
   .card-wrapper:nth-child(even) {
     padding: 0 0.25rem 0.5rem;
@@ -260,7 +270,7 @@ input:focus {
   }
 }
 
-@media only screen and (min-width: 769px) {
+@media only screen and (min-width: 1280px) {
   .card-wrapper:nth-child(4n+1),
   .card-wrapper:nth-child(4n) {
     padding: 0 0.25rem 0.5rem;

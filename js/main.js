@@ -74,29 +74,37 @@ function generateDomTree(tagName, attributes, children) {
 
 function renderCards(object) {
   $featuredGames.replaceChildren();
-  previousPageUrl = object.previous;
-  nextPageUrl = object.next;
 
-  for (var i = 0; i < object.results.length; i++) {
+  if (currentView === 'results' && object.results.length === 0) {
     $featuredGames.appendChild(
-      generateDomTree('div', { class: 'card-wrapper col-50' }, [
-        generateDomTree('div', {
-          class: 'card-feat row',
-          'data-url': domain + '/' + object.results[i].slug + key
-        }, [
-          generateDomTree('div', { class: 'col-100' }, [
-            generateDomTree('div', { class: 'row' }, [
-              generateDomTree('div', { class: 'card-feat-image col-100' }, [
-                generateDomTree('img', {
-                  src: object.results[i].background_image,
-                  alt: object.results[i].name
-                })])]),
-            generateDomTree('div', { class: 'row' }, [
-              generateDomTree('div', { class: 'card-feat-title col-100' }, [
-                generateDomTree('h4', {
-                  class: 'text-center',
-                  textContent: object.results[i].name
-                })])])])])]));
+      generateDomTree('div', { class: 'col-100 text-center' }, [
+        generateDomTree('p', { textContent: 'No matches found.' })
+      ]));
+  } else {
+    for (var i = 0; i < object.results.length; i++) {
+      $featuredGames.appendChild(
+        generateDomTree('div', { class: 'card-wrapper col-50' }, [
+          generateDomTree('div', {
+            class: 'card-feat row',
+            'data-url': domain + '/' + object.results[i].slug + key
+          }, [
+            generateDomTree('div', { class: 'col-100' }, [
+              generateDomTree('div', { class: 'row' }, [
+                generateDomTree('div', { class: 'card-feat-image col-100' }, [
+                  generateDomTree('img', {
+                    src: object.results[i].background_image,
+                    alt: object.results[i].name
+                  })])]),
+              generateDomTree('div', { class: 'row' }, [
+                generateDomTree('div', { class: 'card-feat-title col-100' }, [
+                  generateDomTree('h4', {
+                    class: 'text-center',
+                    textContent: object.results[i].name
+                  })])])])])]));
+    }
+
+    previousPageUrl = object.previous;
+    nextPageUrl = object.next;
   }
 }
 
@@ -231,7 +239,9 @@ function goToFeatured() {
 
   if (currentView === 'results') {
     $backLinkView.hidden = true;
+    $pageLabel.hidden = false;
     $pageNumBottom.hidden = false;
+    $nextButton.hidden = false;
   }
 
   if (currentView === 'detail' || currentView === 'bookmarks') {

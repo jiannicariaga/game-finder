@@ -9,6 +9,7 @@ header {
   top: 0;
   background-color: #5667a6;
   width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 }
 
 h1 {
@@ -25,7 +26,7 @@ a:hover {
   text-decoration: none;
 }
 
-.home {
+.brand {
   text-decoration: none;
 }
 
@@ -36,7 +37,21 @@ a:hover {
 }
 
 .bookmarks {
-  margin-right: 1rem;
+  margin-right: 1.25rem;
+}
+
+.brand:active,
+.bookmarks:active,
+.search:active {
+  color: #c7d0f2;
+}
+
+.back-arrow-feat:hover,
+.back-arrow-detail:hover,
+.bookmark-action:hover,
+.website:hover,
+.up-arrow:hover {
+  color: #7e97f2;
 }
 
 .back-arrow-feat > span,
@@ -47,10 +62,6 @@ a:hover {
 
 main {
   margin-top: 70px;
-}
-
-h3 {
-  margin: 0.75rem 0;
 }
 
 .card-wrapper {
@@ -72,18 +83,22 @@ h3 {
 .card-feat,
 .card-detail {
   background-color: #282b30;
-  border-radius: 10px;
+  border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 }
 
 .card-feat {
-  transition: margin 0.2s ease-in-out;
+  transition: margin 0.15s ease-in-out;
 }
 
 .card-feat:hover {
   background-color: #1e2124;
   cursor: pointer;
   margin-top: -4px;
+}
+
+.card-feat:active {
+  margin-top: -2px;
 }
 
 .card-feat-image,
@@ -118,8 +133,12 @@ img {
   padding: 0 1rem;
 }
 
+h3 {
+  margin: 0.75rem 0;
+}
+
 p {
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.75rem;
   margin: 0;
 }
@@ -137,24 +156,6 @@ ul {
 li {
   font-size: 0.9rem;
   line-height: 1.75rem;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(0 0 0 / 75%);
-  z-index: 1;
-}
-
-.modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
 }
 
 input {
@@ -181,7 +182,8 @@ input:focus {
   overflow: hidden;
 }
 
-.suggestions a {
+.suggestions a,
+.no-matches {
   color: #5667a6;
   font-size: 1rem;
   font-weight: 700;
@@ -206,13 +208,20 @@ input:focus {
   font-weight: 400;
   border: none;
   border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
   padding: 0.5rem 1.25rem;
+}
+
+.exit-btn {
+  box-shadow: none;
+  margin-top: 35px;
 }
 
 .submit-btn {
   width: 100%;
   height: 100%;
   border-radius: 0 20px 20px 0;
+  box-shadow: none;
   padding: 0;
 }
 
@@ -220,14 +229,11 @@ input:focus {
   font-size: 1rem;
 }
 
-.exit-btn {
-  margin-top: 35px;
-}
-
 .back-btn:hover,
 .next-btn:hover,
 .submit-btn:hover,
 .exit-btn:hover {
+  background-color: #49588c;
   cursor: pointer;
 }
 
@@ -239,7 +245,86 @@ input:focus {
   padding: 19.2px 0;
 }
 
-@media only screen and (min-width: 426px) {
+.load-modal-overlay,
+.search-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0 0 0 / 75%);
+  z-index: 1;
+}
+
+.load-modal-overlay {
+  z-index: 2;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.lds-ripple {
+  display: inline-block;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 144px;
+  height: 144px;
+}
+
+.lds-ripple div {
+  position: absolute;
+  border: 4px solid #fff;
+  opacity: 1;
+  border-radius: 50%;
+  animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+.lds-ripple div:nth-child(2) {
+  animation-delay: -0.5s;
+}
+
+@keyframes lds-ripple {
+  0% {
+    top: 72px;
+    left: 72px;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  4.9% {
+    top: 72px;
+    left: 72px;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  5% {
+    top: 72px;
+    left: 72px;
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+
+  100% {
+    top: 0;
+    left: 0;
+    width: 144px;
+    height: 144px;
+    opacity: 0;
+  }
+}
+
+@media only screen and (min-width: 768px) {
   .card-wrapper:nth-child(odd),
   .card-wrapper:nth-child(even) {
     padding: 0 0.25rem 0.5rem;
@@ -260,7 +345,7 @@ input:focus {
   }
 }
 
-@media only screen and (min-width: 769px) {
+@media only screen and (min-width: 1280px) {
   .card-wrapper:nth-child(4n+1),
   .card-wrapper:nth-child(4n) {
     padding: 0 0.25rem 0.5rem;

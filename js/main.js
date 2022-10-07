@@ -16,6 +16,13 @@ var $detailView = document.querySelector('[data-view="detail"]');
 var $searchView = document.querySelector('[data-view="search"]');
 var $suggestionsView = document.querySelector('[data-view="suggestions"]');
 var $loadView = document.querySelector('[data-view="load"]');
+var $brandIcon = document.querySelector('.brand');
+var $bookmarkIcon = document.querySelector('.bookmarks');
+var $bookmarkAction = document.querySelector('.bookmark-action');
+var $searchIcon = document.querySelector('.search');
+var $input = document.querySelector('input');
+var $suggestions = document.querySelector('.suggestions');
+var $form = document.querySelector('form');
 var $viewLabel = document.querySelector('.view-label');
 var $pageLabel = document.querySelector('.page-label');
 var $pageNumTop = document.querySelector('.page-num-top');
@@ -26,12 +33,6 @@ var $exitButton = document.querySelector('.exit-btn');
 var $backLinkFeatured = document.querySelector('.back-arrow-feat');
 var $backLinkDetail = document.querySelector('.back-arrow-detail');
 var $topLinkDetail = document.querySelector('.up-arrow');
-var $bookmarkIcon = document.querySelector('.bookmarks');
-var $bookmarkAction = document.querySelector('.bookmark-action');
-var $searchIcon = document.querySelector('.search');
-var $input = document.querySelector('input');
-var $suggestions = document.querySelector('.suggestions');
-var $form = document.querySelector('form');
 var $featuredGames = document.querySelector('.featured-games');
 
 function getData(url, task) {
@@ -257,6 +258,14 @@ function toggleModal(event) {
 function goToFeatured() {
   $featuredGames.replaceChildren();
   getData(domain + key + pageParam + pageNumFeatured, renderCards);
+  currentView = 'featured';
+  $viewLabel.textContent = 'Featured';
+  $pageNumTop.textContent = pageNumFeatured;
+  $pageNumBottom.textContent = pageNumFeatured;
+  $backLinkView.hidden = true;
+  $pageNumBottom.hidden = false;
+  $featuredView.hidden = true;
+  $detailView.hidden = true;
 
   if (currentView === 'detail' || currentView === 'bookmarks') {
     $pageLabel.hidden = false;
@@ -277,15 +286,6 @@ function goToFeatured() {
   } else {
     $nextButton.hidden = false;
   }
-
-  currentView = 'featured';
-  $viewLabel.textContent = 'Featured';
-  $pageNumTop.textContent = pageNumFeatured;
-  $pageNumBottom.textContent = pageNumFeatured;
-  $backLinkView.hidden = true;
-  $pageNumBottom.hidden = false;
-  $featuredView.hidden = true;
-  $detailView.hidden = true;
 }
 
 $featuredGames.addEventListener('click', function (event) {
@@ -362,10 +362,16 @@ $form.addEventListener('submit', function (event) {
   $searchView.hidden = true;
 });
 
+$brandIcon.addEventListener('click', function (event) {
+  pageNumFeatured = 1;
+  goToFeatured();
+});
+
 $backButton.addEventListener('click', function (event) {
   getData(previousPageUrl, renderCards);
   window.scrollTo({ top: 0, behavior: 'smooth' });
   $nextButton.hidden = false;
+  $featuredView.hidden = true;
 
   if (currentView === 'featured') {
     pageNumFeatured--;
@@ -387,6 +393,7 @@ $nextButton.addEventListener('click', function (event) {
   getData(nextPageUrl, renderCards);
   window.scrollTo({ top: 0, behavior: 'smooth' });
   $backButton.hidden = false;
+  $featuredView.hidden = true;
 
   if (currentView === 'featured') {
     pageNumFeatured++;

@@ -27,6 +27,10 @@ a:hover {
   text-decoration: none;
 }
 
+.brand {
+  text-decoration: none;
+}
+
 .bookmarks,
 .search,
 .bookmark-action {
@@ -34,9 +38,10 @@ a:hover {
 }
 
 .bookmarks {
-  margin-right: 1rem;
+  margin-right: 1.25rem;
 }
 
+.brand:hover,
 .bookmarks:hover,
 .search:hover {
   color: #c7d0f2;
@@ -126,7 +131,7 @@ h3 {
 }
 
 p {
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.75rem;
   margin: 0;
 }

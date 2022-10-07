@@ -202,7 +202,11 @@ function renderSuggestions(object) {
         textContent: 'No matches found.'
       }));
   } else {
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < object.results.length; i++) {
+      if (i === 10) {
+        return;
+      }
+
       $suggestions.appendChild(
         generateDomTree('li', {}, [
           generateDomTree('a', {

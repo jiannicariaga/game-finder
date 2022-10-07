@@ -22,7 +22,6 @@ a {
 }
 
 a:hover {
-  color: #7e97f2;
   cursor: pointer;
   text-decoration: none;
 }
@@ -41,10 +40,18 @@ a:hover {
   margin-right: 1.25rem;
 }
 
-.brand:hover,
-.bookmarks:hover,
-.search:hover {
+.brand:active,
+.bookmarks:active,
+.search:active {
   color: #c7d0f2;
+}
+
+.back-arrow-feat:hover,
+.back-arrow-detail:hover,
+.bookmark-action:hover,
+.website:hover,
+.up-arrow:hover {
+  color: #7e97f2;
 }
 
 .back-arrow-feat > span,
@@ -76,7 +83,7 @@ main {
 .card-feat,
 .card-detail {
   background-color: #282b30;
-  border-radius: 10px;
+  border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 }
 
@@ -201,8 +208,13 @@ input:focus {
   font-weight: 400;
   border: none;
   border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
   padding: 0.5rem 1.25rem;
+}
+
+.exit-btn {
+  box-shadow: none;
+  margin-top: 35px;
 }
 
 .submit-btn {
@@ -215,10 +227,6 @@ input:focus {
 
 .submit-btn > span {
   font-size: 1rem;
-}
-
-.exit-btn {
-  margin-top: 35px;
 }
 
 .back-btn:hover,

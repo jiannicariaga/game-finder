@@ -16,7 +16,7 @@ var $detailView = document.querySelector('[data-view="detail"]');
 var $searchView = document.querySelector('[data-view="search"]');
 var $suggestionsView = document.querySelector('[data-view="suggestions"]');
 var $loadView = document.querySelector('[data-view="load"]');
-// var $errorView = document.querySelector('[data-view="error"]');
+var $errorView = document.querySelector('[data-view="error"]');
 var $brandIcon = document.querySelector('.brand');
 var $bookmarkIcon = document.querySelector('.bookmarks');
 var $bookmarkAction = document.querySelector('.bookmark-action');
@@ -44,7 +44,13 @@ function getData(url, task) {
     task(xhr.response);
     $loadView.hidden = true;
   });
-  xhr.send();
+
+  if (navigator.onLine) {
+    xhr.send();
+  } else {
+    $errorView.hidden = false;
+  }
+
   $loadView.hidden = false;
 }
 

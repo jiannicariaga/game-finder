@@ -16,6 +16,7 @@ var $detailView = document.querySelector('[data-view="detail"]');
 var $searchView = document.querySelector('[data-view="search"]');
 var $suggestionsView = document.querySelector('[data-view="suggestions"]');
 var $loadView = document.querySelector('[data-view="load"]');
+// var $errorView = document.querySelector('[data-view="error"]');
 var $brandIcon = document.querySelector('.brand');
 var $bookmarkIcon = document.querySelector('.bookmarks');
 var $bookmarkAction = document.querySelector('.bookmark-action');
@@ -195,7 +196,7 @@ function renderSuggestions(object) {
         textContent: 'No matches found.'
       }));
   } else {
-    for (var i = 0; i < object.results.length; i++) {
+    for (var i = 0; i < 10; i++) {
       $suggestions.appendChild(
         generateDomTree('li', {}, [
           generateDomTree('a', {

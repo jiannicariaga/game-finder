@@ -2,7 +2,7 @@ var domain = 'https://api.rawg.io/api/games';
 var key = '?key=76e41dc99b8042e0b6f0cd116d9dadc1';
 var pageParam = '&page=';
 var searchParam = '&search=';
-var placeholderImage = 'images/placeholder.webp';
+var placeholderImg = 'images/placeholder.webp';
 var currentView = 'featured';
 var previousView = null;
 var previousPageUrl = null;
@@ -29,9 +29,9 @@ var $topLinkDetail = document.querySelector('.up-arrow');
 var $bookmarkIcon = document.querySelector('.bookmarks');
 var $bookmarkAction = document.querySelector('.bookmark-action');
 var $searchIcon = document.querySelector('.search');
-var $form = document.querySelector('form');
 var $input = document.querySelector('input');
 var $suggestions = document.querySelector('.suggestions');
+var $form = document.querySelector('form');
 var $featuredGames = document.querySelector('.featured-games');
 
 function getData(url, task) {
@@ -58,7 +58,7 @@ function generateDomTree(tagName, attributes, children) {
       $element.textContent = attributes.textContent;
     } else {
       if (attributes[key] === null) {
-        $element.setAttribute(key, placeholderImage);
+        $element.setAttribute(key, placeholderImg);
       } else {
         $element.setAttribute(key, attributes[key]);
       }
@@ -80,6 +80,9 @@ function renderCards(object) {
       generateDomTree('div', { class: 'col-100 text-center' }, [
         generateDomTree('p', { textContent: 'No matches found.' })
       ]));
+    $pageLabel.hidden = true;
+    $pageNumBottom.hidden = true;
+    $nextButton.hidden = true;
   } else {
     for (var i = 0; i < object.results.length; i++) {
       $featuredGames.appendChild(
@@ -103,9 +106,17 @@ function renderCards(object) {
                   })])])])])]));
     }
 
-    previousPageUrl = object.previous;
-    nextPageUrl = object.next;
+    if (object.results.length < 20) {
+      $nextButton.hidden = true;
+    } else {
+      previousPageUrl = object.previous;
+      nextPageUrl = object.next;
+    }
+
+    $backLinkFeatured.hidden = false;
   }
+
+  $featuredView.hidden = false;
 }
 
 function fillDetail(object) {
@@ -119,19 +130,20 @@ function fillDetail(object) {
   var $esrbRating = document.querySelector('.esrb-rating');
   var $website = document.querySelector('.website');
   $title.textContent = object.name;
-  $banner.src = object.background_image;
-  $banner.alt = object.name;
   $about.textContent = object.description_raw;
   $releaseDate.textContent = object.released;
   $website.href = object.website;
   renderDetailList($genre, object.genres);
   renderDetailList($developer, object.developers);
   renderDetailList($publisher, object.publishers);
-  data.currentDetail = {
-    background_image: object.background_image,
-    name: object.name,
-    slug: object.slug
-  };
+
+  if (object.background_image !== null) {
+    $banner.src = object.background_image;
+    $banner.alt = object.name;
+  } else {
+    $banner.src = placeholderImg;
+    $banner.alt = 'Placeholder Image';
+  }
 
   if (object.esrb_rating !== null) {
     $esrbRating.textContent = object.esrb_rating.name;
@@ -139,15 +151,13 @@ function fillDetail(object) {
     $esrbRating.textContent = '';
   }
 
-  var index = data.bookmarks.findIndex(function (object) {
-    return object.slug === data.currentDetail.slug;
-  });
-
-  if (index === -1) {
+  if (isBookmarked(object) === -1) {
     $bookmarkAction.className = 'bookmark-action far fa-bookmark';
   } else {
     $bookmarkAction.className = 'bookmark-action fas fa-bookmark';
   }
+
+  $detailView.hidden = false;
 }
 
 function renderDetailList(parentElement, array) {
@@ -160,10 +170,24 @@ function renderDetailList(parentElement, array) {
   }
 }
 
+function isBookmarked(object) {
+  data.currentDetail = {
+    background_image: object.background_image,
+    name: object.name,
+    slug: object.slug
+  };
+
+  return data.bookmarks.findIndex(function (object) {
+    return object.slug === data.currentDetail.slug;
+  });
+}
+
 function renderSuggestions(object) {
   $suggestions.replaceChildren();
 
-  if (object.results.length === 0) {
+  if ($input.value === '') {
+    $suggestionsView.hidden = true;
+  } else if (object.results.length === 0) {
     $suggestions.appendChild(
       generateDomTree('li', {
         class: 'no-matches',
@@ -171,16 +195,13 @@ function renderSuggestions(object) {
       }));
   } else {
     for (var i = 0; i < object.results.length; i++) {
-      if (i === 10) {
-        return;
-      }
-
       $suggestions.appendChild(
         generateDomTree('li', {}, [
           generateDomTree('a', {
             'data-url': domain + '/' + object.results[i].slug + key,
             textContent: object.results[i].name
           })]));
+      $suggestionsView.hidden = false;
     }
   }
 }
@@ -219,38 +240,30 @@ function renderBookmarks(array) {
 }
 
 function toggleModal(event) {
+  $suggestions.replaceChildren();
+  $input.value = null;
+  $suggestionsView.hidden = true;
+
   if (currentView !== 'search') {
-    $searchView.hidden = false;
     previousView = currentView;
     currentView = 'search';
+    $searchView.hidden = false;
   } else {
-    $searchView.hidden = true;
     currentView = previousView;
+    $searchView.hidden = true;
   }
-
-  $suggestions.replaceChildren();
-  $suggestionsView.hidden = true;
-  $input.value = null;
 }
 
 function goToFeatured() {
   $featuredGames.replaceChildren();
   getData(domain + key + pageParam + pageNumFeatured, renderCards);
 
-  if (currentView === 'results') {
-    $backLinkView.hidden = true;
-    $pageLabel.hidden = false;
-    $pageNumBottom.hidden = false;
-    $nextButton.hidden = false;
-  }
-
   if (currentView === 'detail' || currentView === 'bookmarks') {
     $pageLabel.hidden = false;
-    $pageNumTop.hidden = false;
-    $pageNumBottom.hidden = false;
-    $backLinkView.hidden = true;
-    $featuredView.hidden = false;
-    $detailView.hidden = true;
+  }
+
+  if (currentView === 'results') {
+    $nextButton.hidden = false;
   }
 
   if (pageNumFeatured === 1) {
@@ -265,22 +278,88 @@ function goToFeatured() {
     $nextButton.hidden = false;
   }
 
+  currentView = 'featured';
   $viewLabel.textContent = 'Featured';
   $pageNumTop.textContent = pageNumFeatured;
   $pageNumBottom.textContent = pageNumFeatured;
-  $featuredView.hidden = false;
+  $backLinkView.hidden = true;
+  $pageNumBottom.hidden = false;
+  $featuredView.hidden = true;
   $detailView.hidden = true;
-  currentView = 'featured';
 }
 
 $featuredGames.addEventListener('click', function (event) {
   if (event.target.closest('.card-feat')) {
     getData(event.target.closest('.card-feat').getAttribute('data-url'), fillDetail);
     window.scrollTo({ top: 0, behavior: 'instant' });
-    $featuredView.hidden = true;
-    $detailView.hidden = false;
     currentView = 'detail';
+    $featuredView.hidden = true;
   }
+});
+
+$bookmarkIcon.addEventListener('click', function (event) {
+  renderBookmarks(data.bookmarks);
+  currentView = 'bookmarks';
+  $viewLabel.textContent = 'Bookmarks';
+  $pageLabel.hidden = true;
+  $backButton.hidden = true;
+  $pageNumBottom.hidden = true;
+  $nextButton.hidden = true;
+  $backLinkView.hidden = false;
+  $featuredView.hidden = false;
+  $detailView.hidden = true;
+});
+
+$bookmarkAction.addEventListener('click', function (event) {
+  var index = data.bookmarks.findIndex(function (object) {
+    return object.slug === data.currentDetail.slug;
+  });
+
+  if (index === -1) {
+    $bookmarkAction.className = 'bookmark-action fas fa-bookmark';
+    data.bookmarks.push(data.currentDetail);
+  } else {
+    $bookmarkAction.className = 'bookmark-action far fa-bookmark';
+    data.bookmarks.splice(index, 1);
+  }
+});
+
+$input.addEventListener('keyup', function (event) {
+  if (event && timeoutId !== null) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(function () {
+      getData(domain + key + searchParam + $input.value, renderSuggestions);
+    }, 500);
+  } else {
+    timeoutId = setTimeout(function () {
+      getData(domain + key + searchParam + $input.value, renderSuggestions);
+    }, 500);
+    $suggestionsView.hidden = true;
+  }
+});
+
+$suggestions.addEventListener('click', function (event) {
+  if (event.target.matches('a')) {
+    getData(event.target.getAttribute('data-url'), fillDetail);
+    currentView = 'detail';
+    $featuredView.hidden = true;
+    $detailView.hidden = true;
+    $searchView.hidden = true;
+  }
+});
+
+$form.addEventListener('submit', function (event) {
+  event.preventDefault();
+  getData(domain + key + searchParam + $input.value, renderCards);
+  currentView = 'results';
+  pageNumResults = 1;
+  $viewLabel.textContent = 'Search Results';
+  $pageNumTop.textContent = pageNumResults;
+  $pageNumBottom.textContent = pageNumResults;
+  $backLinkView.hidden = false;
+  $featuredView.hidden = true;
+  $detailView.hidden = true;
+  $searchView.hidden = true;
 });
 
 $backButton.addEventListener('click', function (event) {
@@ -299,7 +378,7 @@ $backButton.addEventListener('click', function (event) {
   }
 
   if ((currentView === 'featured' && pageNumFeatured === 1) ||
-      (currentView === 'results' && pageNumResults === 1)) {
+    (currentView === 'results' && pageNumResults === 1)) {
     $backButton.hidden = true;
   }
 });
@@ -321,77 +400,6 @@ $nextButton.addEventListener('click', function (event) {
 
   if (nextPageUrl === null) {
     $nextButton.hidden = true;
-  }
-});
-
-$input.addEventListener('keyup', function (event) {
-  if (event && timeoutId !== null) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(function () {
-      getData(domain + key + searchParam + $input.value, renderSuggestions);
-    }, 500);
-  } else {
-    timeoutId = setTimeout(function () {
-      getData(domain + key + searchParam + $input.value, renderSuggestions);
-    }, 500);
-  }
-
-  $suggestionsView.hidden = false;
-});
-
-$suggestions.addEventListener('click', function (event) {
-  if (event.target.matches('a')) {
-    getData(event.target.getAttribute('data-url'), fillDetail);
-    $featuredView.hidden = true;
-    $detailView.hidden = false;
-    $searchView.hidden = true;
-    currentView = 'detail';
-  }
-});
-
-$form.addEventListener('submit', function (event) {
-  event.preventDefault();
-  getData(domain + key + searchParam + $input.value, renderCards);
-  $viewLabel.textContent = 'Search Results';
-  pageNumResults = 1;
-  $pageNumTop.textContent = pageNumResults;
-  $pageNumBottom.textContent = pageNumResults;
-  $backLinkView.hidden = false;
-  $pageLabel.hidden = false;
-  $backButton.hidden = true;
-  $pageNumBottom.hidden = false;
-  $nextButton.hidden = false;
-  $featuredView.hidden = false;
-  $detailView.hidden = true;
-  $searchView.hidden = true;
-  currentView = 'results';
-});
-
-$bookmarkIcon.addEventListener('click', function (event) {
-  renderBookmarks(data.bookmarks);
-  $viewLabel.textContent = 'Bookmarks';
-  $pageLabel.hidden = true;
-  $pageNumTop.hidden = true;
-  $backButton.hidden = true;
-  $pageNumBottom.hidden = true;
-  $nextButton.hidden = true;
-  $backLinkView.hidden = false;
-  $featuredView.hidden = false;
-  $detailView.hidden = true;
-  currentView = 'bookmarks';
-});
-
-$bookmarkAction.addEventListener('click', function (event) {
-  var index = data.bookmarks.findIndex(function (object) {
-    return object.slug === data.currentDetail.slug;
-  });
-
-  if (index === -1) {
-    $bookmarkAction.className = 'bookmark-action fas fa-bookmark';
-    data.bookmarks.push(data.currentDetail);
-  } else {
-    $bookmarkAction.className = 'bookmark-action far fa-bookmark';
-    data.bookmarks.splice(index, 1);
   }
 });
 

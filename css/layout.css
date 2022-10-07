@@ -56,6 +56,10 @@
   text-align: right;
 }
 
+.hidden {
+  display: none;
+}
+
 @media only screen and (min-width: 768px) {
   .container {
     max-width: 752px;

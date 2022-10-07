@@ -42,16 +42,16 @@ function getData(url, task) {
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
     task(xhr.response);
-    $loadView.hidden = true;
+    $loadView.classList.add('hidden');
   });
 
   if (navigator.onLine) {
     xhr.send();
   } else {
-    $errorView.hidden = false;
+    $errorView.classList.remove('hidden');
   }
 
-  $loadView.hidden = false;
+  $loadView.classList.remove('hidden');
 }
 
 function generateDomTree(tagName, attributes, children) {
@@ -88,9 +88,9 @@ function renderCards(object) {
       generateDomTree('div', { class: 'col-100 text-center' }, [
         generateDomTree('p', { textContent: 'No matches found.' })
       ]));
-    $pageLabel.hidden = true;
-    $pageNumBottom.hidden = true;
-    $nextButton.hidden = true;
+    $pageLabel.classList.add('hidden');
+    $pageNumBottom.classList.add('hidden');
+    $nextButton.classList.add('hidden');
   } else {
     for (var i = 0; i < object.results.length; i++) {
       $featuredGames.appendChild(
@@ -115,16 +115,16 @@ function renderCards(object) {
     }
 
     if (object.results.length < 20) {
-      $nextButton.hidden = true;
+      $nextButton.classList.add('hidden');
     } else {
       previousPageUrl = object.previous;
       nextPageUrl = object.next;
     }
 
-    $backLinkFeatured.hidden = false;
+    $backLinkFeatured.classList.remove('hidden');
   }
 
-  $featuredView.hidden = false;
+  $featuredView.classList.remove('hidden');
 }
 
 function fillDetail(object) {
@@ -165,7 +165,7 @@ function fillDetail(object) {
     $bookmarkAction.className = 'bookmark-action fas fa-bookmark';
   }
 
-  $detailView.hidden = false;
+  $detailView.classList.remove('hidden');
 }
 
 function renderDetailList(parentElement, array) {
@@ -194,7 +194,7 @@ function renderSuggestions(object) {
   $suggestions.replaceChildren();
 
   if ($input.value === '') {
-    $suggestionsView.hidden = true;
+    $suggestionsView.classList.add('hidden');
   } else if (object.results.length === 0) {
     $suggestions.appendChild(
       generateDomTree('li', {
@@ -209,7 +209,7 @@ function renderSuggestions(object) {
             'data-url': domain + '/' + object.results[i].slug + key,
             textContent: object.results[i].name
           })]));
-      $suggestionsView.hidden = false;
+      $suggestionsView.classList.remove('hidden');
     }
   }
 }
@@ -250,15 +250,15 @@ function renderBookmarks(array) {
 function toggleModal(event) {
   $suggestions.replaceChildren();
   $input.value = null;
-  $suggestionsView.hidden = true;
+  $suggestionsView.classList.add('hidden');
 
   if (currentView !== 'search') {
     previousView = currentView;
     currentView = 'search';
-    $searchView.hidden = false;
+    $searchView.classList.remove('hidden');
   } else {
     currentView = previousView;
-    $searchView.hidden = true;
+    $searchView.classList.add('hidden');
   }
 }
 
@@ -269,29 +269,29 @@ function goToFeatured() {
   $viewLabel.textContent = 'Featured';
   $pageNumTop.textContent = pageNumFeatured;
   $pageNumBottom.textContent = pageNumFeatured;
-  $backLinkView.hidden = true;
-  $pageNumBottom.hidden = false;
-  $featuredView.hidden = true;
-  $detailView.hidden = true;
+  $backLinkView.classList.add('hidden');
+  $pageNumBottom.classList.remove('hidden');
+  $featuredView.classList.add('hidden');
+  $detailView.classList.add('hidden');
 
   if (currentView === 'detail' || currentView === 'bookmarks') {
-    $pageLabel.hidden = false;
+    $pageLabel.classList.remove('hidden');
   }
 
   if (currentView === 'results') {
-    $nextButton.hidden = false;
+    $nextButton.classList.remove('hidden');
   }
 
   if (pageNumFeatured === 1) {
-    $backButton.hidden = true;
+    $backButton.classList.add('hidden');
   } else {
-    $backButton.hidden = false;
+    $backButton.classList.remove('hidden');
   }
 
   if (nextPageUrl === null) {
-    $nextButton.hidden = true;
+    $nextButton.classList.add('hidden');
   } else {
-    $nextButton.hidden = false;
+    $nextButton.classList.remove('hidden');
   }
 }
 
@@ -300,7 +300,7 @@ $featuredGames.addEventListener('click', function (event) {
     getData(event.target.closest('.card-feat').getAttribute('data-url'), fillDetail);
     window.scrollTo({ top: 0, behavior: 'instant' });
     currentView = 'detail';
-    $featuredView.hidden = true;
+    $featuredView.classList.add('hidden');
   }
 });
 
@@ -308,13 +308,13 @@ $bookmarkIcon.addEventListener('click', function (event) {
   renderBookmarks(data.bookmarks);
   currentView = 'bookmarks';
   $viewLabel.textContent = 'Bookmarks';
-  $pageLabel.hidden = true;
-  $backButton.hidden = true;
-  $pageNumBottom.hidden = true;
-  $nextButton.hidden = true;
-  $backLinkView.hidden = false;
-  $featuredView.hidden = false;
-  $detailView.hidden = true;
+  $pageLabel.classList.add('hidden');
+  $backButton.classList.add('hidden');
+  $pageNumBottom.classList.add('hidden');
+  $nextButton.classList.add('hidden');
+  $backLinkView.classList.remove('hidden');
+  $featuredView.classList.remove('hidden');
+  $detailView.classList.add('hidden');
 });
 
 $bookmarkAction.addEventListener('click', function (event) {
@@ -341,7 +341,7 @@ $input.addEventListener('keyup', function (event) {
     timeoutId = setTimeout(function () {
       getData(domain + key + searchParam + $input.value, renderSuggestions);
     }, 500);
-    $suggestionsView.hidden = true;
+    $suggestionsView.classList.add('hidden');
   }
 });
 
@@ -349,9 +349,9 @@ $suggestions.addEventListener('click', function (event) {
   if (event.target.matches('a')) {
     getData(event.target.getAttribute('data-url'), fillDetail);
     currentView = 'detail';
-    $featuredView.hidden = true;
-    $detailView.hidden = true;
-    $searchView.hidden = true;
+    $featuredView.classList.add('hidden');
+    $detailView.classList.add('hidden');
+    $searchView.classList.add('hidden');
   }
 });
 
@@ -363,10 +363,10 @@ $form.addEventListener('submit', function (event) {
   $viewLabel.textContent = 'Search Results';
   $pageNumTop.textContent = pageNumResults;
   $pageNumBottom.textContent = pageNumResults;
-  $backLinkView.hidden = false;
-  $featuredView.hidden = true;
-  $detailView.hidden = true;
-  $searchView.hidden = true;
+  $backLinkView.classList.remove('hidden');
+  $featuredView.classList.add('hidden');
+  $detailView.classList.add('hidden');
+  $searchView.classList.add('hidden');
 });
 
 $brandIcon.addEventListener('click', function (event) {
@@ -377,8 +377,8 @@ $brandIcon.addEventListener('click', function (event) {
 $backButton.addEventListener('click', function (event) {
   getData(previousPageUrl, renderCards);
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  $nextButton.hidden = false;
-  $featuredView.hidden = true;
+  $nextButton.classList.remove('hidden');
+  $featuredView.classList.add('hidden');
 
   if (currentView === 'featured') {
     pageNumFeatured--;
@@ -392,15 +392,15 @@ $backButton.addEventListener('click', function (event) {
 
   if ((currentView === 'featured' && pageNumFeatured === 1) ||
     (currentView === 'results' && pageNumResults === 1)) {
-    $backButton.hidden = true;
+    $backButton.classList.add('hidden');
   }
 });
 
 $nextButton.addEventListener('click', function (event) {
   getData(nextPageUrl, renderCards);
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  $backButton.hidden = false;
-  $featuredView.hidden = true;
+  $backButton.classList.remove('hidden');
+  $featuredView.classList.add('hidden');
 
   if (currentView === 'featured') {
     pageNumFeatured++;
@@ -413,7 +413,7 @@ $nextButton.addEventListener('click', function (event) {
   }
 
   if (nextPageUrl === null) {
-    $nextButton.hidden = true;
+    $nextButton.classList.add('hidden');
   }
 });
 

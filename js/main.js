@@ -83,7 +83,8 @@ function generateDomTree(tagName, attributes, children) {
 function renderCards(object) {
   $featuredGames.replaceChildren();
 
-  if (currentView === 'results' && object.results.length === 0) {
+  if ((currentView === 'results' && object.results.length === 0) ||
+  (currentView === 'results' && $input.value.trim().length === 0)) {
     $featuredGames.appendChild(
       generateDomTree('div', { class: 'col-100 text-center' }, [
         generateDomTree('p', { textContent: 'No matches found.' })
@@ -193,9 +194,10 @@ function isBookmarked(object) {
 function renderSuggestions(object) {
   $suggestions.replaceChildren();
 
-  if ($input.value === '') {
+  if (!$input.value.trim().length) {
     $suggestionsView.classList.add('hidden');
-  } else if (object.results.length === 0) {
+  } else if (!object.results.length) {
+    $suggestionsView.classList.remove('hidden');
     $suggestions.appendChild(
       generateDomTree('li', {
         class: 'no-matches',

@@ -83,8 +83,8 @@ function generateDomTree(tagName, attributes, children) {
 function renderCards(object) {
   $featuredGames.replaceChildren();
 
-  if ((currentView === 'results' && object.results.length === 0) ||
-  (currentView === 'results' && $input.value.trim().length === 0)) {
+  if ((currentView === 'results' && !object.results.length) ||
+  (currentView === 'results' && !$input.value.trim().length)) {
     $featuredGames.appendChild(
       generateDomTree('div', { class: 'col-100 text-center' }, [
         generateDomTree('p', { textContent: 'No matches found.' })
@@ -197,18 +197,16 @@ function renderSuggestions(object) {
   if (!$input.value.trim().length) {
     $suggestionsView.classList.add('hidden');
   } else if (!object.results.length) {
-    $suggestionsView.classList.remove('hidden');
     $suggestions.appendChild(
       generateDomTree('li', {
         class: 'no-matches',
         textContent: 'No matches found.'
       }));
+    $suggestionsView.classList.remove('hidden');
   } else {
-    for (var i = 0; i < object.results.length; i++) {
-      if (i === 10) {
-        return;
-      }
+    var length = (object.results.length < 10) ? object.results.length : 10;
 
+    for (var i = 0; i < length; i++) {
       $suggestions.appendChild(
         generateDomTree('li', {}, [
           generateDomTree('a', {
@@ -223,7 +221,7 @@ function renderSuggestions(object) {
 function renderBookmarks(array) {
   $featuredGames.replaceChildren();
 
-  if (array.length === 0) {
+  if (!array.length) {
     $featuredGames.appendChild(
       generateDomTree('div', { class: 'col-100 text-center' }, [
         generateDomTree('p', { textContent: 'No bookmarks have been saved.' })
@@ -340,15 +338,13 @@ $bookmarkAction.addEventListener('click', function (event) {
 $input.addEventListener('keyup', function (event) {
   if (event && timeoutId !== null) {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(function () {
-      getData(domain + key + searchParam + $input.value, renderSuggestions);
-    }, 500);
   } else {
-    timeoutId = setTimeout(function () {
-      getData(domain + key + searchParam + $input.value, renderSuggestions);
-    }, 500);
     $suggestionsView.classList.add('hidden');
   }
+
+  timeoutId = setTimeout(function () {
+    getData(domain + key + searchParam + $input.value, renderSuggestions);
+  }, 500);
 });
 
 $suggestions.addEventListener('click', function (event) {

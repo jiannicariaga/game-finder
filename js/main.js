@@ -12,8 +12,8 @@ var pageNumFeatured = 1;
 var pageNumResults = 1;
 var modalOn = false;
 var timeoutId = null;
-var $featuredView = document.querySelector('[data-view="featured"]');
 var $backLinkView = document.querySelector('[data-view="back-link"]');
+var $featuredView = document.querySelector('[data-view="featured"]');
 var $detailView = document.querySelector('[data-view="detail"]');
 var $searchView = document.querySelector('[data-view="search"]');
 var $suggestionsView = document.querySelector('[data-view="suggestions"]');
@@ -33,8 +33,7 @@ var $pageNumBottom = document.querySelector('.page-num-bot');
 var $backButton = document.querySelector('.back-btn');
 var $nextButton = document.querySelector('.next-btn');
 var $exitButton = document.querySelector('.exit-btn');
-var $backLinkFeatured = document.querySelector('.back-arrow-feat');
-var $backLinkDetail = document.querySelector('.back-arrow-detail');
+var $backLink = document.querySelector('.back-arrow');
 var $topLinkDetail = document.querySelector('.up-arrow');
 var $featuredGames = document.querySelector('.featured-games');
 
@@ -122,7 +121,7 @@ function renderCards(object) {
       nextPageUrl = object.next;
     }
 
-    $backLinkFeatured.classList.remove('hidden');
+    $backLink.classList.remove('hidden');
   }
 
   $featuredView.classList.remove('hidden');
@@ -323,6 +322,7 @@ function goToDetail() {
   }
 
   currentView = 'detail';
+  $backLinkView.classList.remove('hidden');
   $featuredView.classList.add('hidden');
   $detailView.classList.remove('hidden');
   $searchView.classList.add('hidden');
@@ -472,7 +472,6 @@ $topLinkDetail.addEventListener('click', function (event) {
 
 $searchIcon.addEventListener('click', toggleModal);
 $exitButton.addEventListener('click', toggleModal);
-$backLinkFeatured.addEventListener('click', goToPreviousView);
-$backLinkDetail.addEventListener('click', goToPreviousView);
+$backLink.addEventListener('click', goToPreviousView);
 
 getData(domain + key + pageParam + pageNumFeatured, renderCards);

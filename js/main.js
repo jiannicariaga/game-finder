@@ -5,10 +5,12 @@ var searchParam = '&search=';
 var placeholderImg = 'images/placeholder-image.webp';
 var currentView = 'featured';
 var previousView = null;
+var parentView = null;
 var previousPageUrl = null;
 var nextPageUrl = null;
 var pageNumFeatured = 1;
 var pageNumResults = 1;
+var modalOn = false;
 var timeoutId = null;
 var $featuredView = document.querySelector('[data-view="featured"]');
 var $backLinkView = document.querySelector('[data-view="back-link"]');
@@ -89,8 +91,6 @@ function renderCards(object) {
       generateDomTree('div', { class: 'col-100 text-center' }, [
         generateDomTree('p', { textContent: 'No matches found.' })
       ]));
-    $pageLabel.classList.add('hidden');
-    $pageNumBottom.classList.add('hidden');
     $nextButton.classList.add('hidden');
   } else {
     for (var i = 0; i < object.results.length; i++) {
@@ -256,20 +256,33 @@ function toggleModal(event) {
   $input.value = null;
   $suggestionsView.classList.add('hidden');
 
-  if (currentView !== 'search') {
-    previousView = currentView;
-    currentView = 'search';
+  if (!modalOn) {
+    modalOn = !modalOn;
     $searchView.classList.remove('hidden');
   } else {
-    currentView = previousView;
+    modalOn = !modalOn;
     $searchView.classList.add('hidden');
   }
 }
 
-function goToFeatured() {
+function goToPreviousView() {
   $featuredGames.replaceChildren();
+
+  if (previousView === 'featured' || previousView === currentView) {
+    goToFeatured();
+  } else if (previousView === 'detail') {
+    goToDetail();
+  } else if (previousView === 'bookmarks') {
+    goToBookmarks();
+  } else if (previousView === 'results') {
+    goToResults();
+  }
+}
+
+function goToFeatured() {
   getData(domain + key + pageParam + pageNumFeatured, renderCards);
   currentView = 'featured';
+  parentView = null;
   $viewLabel.textContent = 'Featured';
   $pageNumTop.textContent = pageNumFeatured;
   $pageNumBottom.textContent = pageNumFeatured;
@@ -280,10 +293,6 @@ function goToFeatured() {
 
   if (currentView === 'detail' || currentView === 'bookmarks') {
     $pageLabel.classList.remove('hidden');
-  }
-
-  if (currentView === 'results') {
-    $nextButton.classList.remove('hidden');
   }
 
   if (pageNumFeatured === 1) {
@@ -299,16 +308,27 @@ function goToFeatured() {
   }
 }
 
-$featuredGames.addEventListener('click', function (event) {
-  if (event.target.closest('.card-feat')) {
-    getData(event.target.closest('.card-feat').getAttribute('data-url'), fillDetail);
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    currentView = 'detail';
-    $featuredView.classList.add('hidden');
-  }
-});
+function goToDetail() {
+  window.scrollTo({ top: 0, behavior: 'instant' });
 
-$bookmarkIcon.addEventListener('click', function (event) {
+  if (currentView === 'bookmarks') {
+    previousView = 'bookmarks';
+    parentView = 'bookmarks';
+  } else {
+    previousView = currentView;
+  }
+
+  if (parentView === 'bookmarks') {
+    previousView = 'bookmarks';
+  }
+
+  currentView = 'detail';
+  $featuredView.classList.add('hidden');
+  $detailView.classList.remove('hidden');
+  $searchView.classList.add('hidden');
+}
+
+function goToBookmarks() {
   renderBookmarks(data.bookmarks);
   currentView = 'bookmarks';
   $viewLabel.textContent = 'Bookmarks';
@@ -319,6 +339,42 @@ $bookmarkIcon.addEventListener('click', function (event) {
   $backLinkView.classList.remove('hidden');
   $featuredView.classList.remove('hidden');
   $detailView.classList.add('hidden');
+}
+
+function goToResults() {
+  getData(domain + key + searchParam + $input.value, renderCards);
+  currentView = 'results';
+  $viewLabel.textContent = 'Search Results';
+  $pageNumTop.textContent = pageNumResults;
+  $pageNumBottom.textContent = pageNumResults;
+  $backLinkView.classList.remove('hidden');
+  $featuredView.classList.add('hidden');
+  $detailView.classList.add('hidden');
+  $searchView.classList.add('hidden');
+
+  if (pageNumResults === 1) {
+    $backButton.classList.add('hidden');
+  } else {
+    $backButton.classList.remove('hidden');
+  }
+
+  if (nextPageUrl === null) {
+    $nextButton.classList.add('hidden');
+  } else {
+    $nextButton.classList.remove('hidden');
+  }
+}
+
+$featuredGames.addEventListener('click', function (event) {
+  if (event.target.closest('.card-feat')) {
+    getData(event.target.closest('.card-feat').getAttribute('data-url'), fillDetail);
+    goToDetail();
+  }
+});
+
+$bookmarkIcon.addEventListener('click', function (event) {
+  previousView = currentView;
+  goToBookmarks();
 });
 
 $bookmarkAction.addEventListener('click', function (event) {
@@ -350,25 +406,16 @@ $input.addEventListener('keyup', function (event) {
 $suggestions.addEventListener('click', function (event) {
   if (event.target.matches('a')) {
     getData(event.target.getAttribute('data-url'), fillDetail);
-    currentView = 'detail';
-    $featuredView.classList.add('hidden');
-    $detailView.classList.add('hidden');
-    $searchView.classList.add('hidden');
+    previousView = currentView;
+    goToDetail();
   }
 });
 
 $form.addEventListener('submit', function (event) {
   event.preventDefault();
-  getData(domain + key + searchParam + $input.value, renderCards);
-  currentView = 'results';
+  previousView = currentView;
   pageNumResults = 1;
-  $viewLabel.textContent = 'Search Results';
-  $pageNumTop.textContent = pageNumResults;
-  $pageNumBottom.textContent = pageNumResults;
-  $backLinkView.classList.remove('hidden');
-  $featuredView.classList.add('hidden');
-  $detailView.classList.add('hidden');
-  $searchView.classList.add('hidden');
+  goToResults();
 });
 
 $brandIcon.addEventListener('click', function (event) {
@@ -425,8 +472,7 @@ $topLinkDetail.addEventListener('click', function (event) {
 
 $searchIcon.addEventListener('click', toggleModal);
 $exitButton.addEventListener('click', toggleModal);
-$backLinkFeatured.addEventListener('click', goToFeatured);
-$backLinkDetail.addEventListener('click', goToFeatured);
-$backLinkView.addEventListener('click', goToFeatured);
+$backLinkFeatured.addEventListener('click', goToPreviousView);
+$backLinkDetail.addEventListener('click', goToPreviousView);
 
 getData(domain + key + pageParam + pageNumFeatured, renderCards);

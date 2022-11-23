@@ -45,23 +45,19 @@ function getData(url, task) {
     task(xhr.response);
     $loadView.classList.add('hidden');
   });
-
   if (navigator.onLine) {
     xhr.send();
   } else {
     $errorView.classList.remove('hidden');
   }
-
   $loadView.classList.remove('hidden');
 }
 
 function generateDomTree(tagName, attributes, children) {
   var $element = document.createElement(tagName);
-
   if (!children) {
     children = [];
   }
-
   for (var key in attributes) {
     if (key === 'textContent') {
       $element.textContent = attributes.textContent;
@@ -73,17 +69,14 @@ function generateDomTree(tagName, attributes, children) {
       }
     }
   }
-
   for (var i = 0; i < children.length; i++) {
     $element.append(children[i]);
   }
-
   return $element;
 }
 
 function renderCards(object) {
   $featuredGames.replaceChildren();
-
   if ((currentView === 'results' && !object.results.length) ||
   (currentView === 'results' && !$input.value.trim().length)) {
     $featuredGames.appendChild(
@@ -113,17 +106,14 @@ function renderCards(object) {
                     textContent: object.results[i].name
                   })])])])])]));
     }
-
     if (object.results.length < 20) {
       $nextButton.classList.add('hidden');
     } else {
       previousPageUrl = object.previous;
       nextPageUrl = object.next;
     }
-
     $backLink.classList.remove('hidden');
   }
-
   $featuredView.classList.remove('hidden');
 }
 
@@ -144,7 +134,6 @@ function fillDetail(object) {
   renderDetailList($genre, object.genres);
   renderDetailList($developer, object.developers);
   renderDetailList($publisher, object.publishers);
-
   if (object.background_image !== null) {
     $banner.src = object.background_image;
     $banner.alt = object.name;
@@ -152,25 +141,21 @@ function fillDetail(object) {
     $banner.src = placeholderImg;
     $banner.alt = 'Placeholder Image';
   }
-
   if (object.esrb_rating !== null) {
     $esrbRating.textContent = object.esrb_rating.name;
   } else {
     $esrbRating.textContent = '';
   }
-
   if (isBookmarked(object) === -1) {
     $bookmarkAction.className = 'bookmark-action far fa-bookmark';
   } else {
     $bookmarkAction.className = 'bookmark-action fas fa-bookmark';
   }
-
   $detailView.classList.remove('hidden');
 }
 
 function renderDetailList(parentElement, array) {
   parentElement.replaceChildren();
-
   for (var i = 0; i < array.length; i++) {
     parentElement.appendChild(
       generateDomTree('li', { textContent: array[i].name })
@@ -184,7 +169,6 @@ function isBookmarked(object) {
     name: object.name,
     slug: object.slug
   };
-
   return data.bookmarks.findIndex(function (object) {
     return object.slug === data.currentDetail.slug;
   });
@@ -192,7 +176,6 @@ function isBookmarked(object) {
 
 function renderSuggestions(object) {
   $suggestions.replaceChildren();
-
   if (!$input.value.trim().length) {
     $suggestionsView.classList.add('hidden');
   } else if (!object.results.length) {
@@ -204,7 +187,6 @@ function renderSuggestions(object) {
     $suggestionsView.classList.remove('hidden');
   } else {
     var length = (object.results.length < 10) ? object.results.length : 10;
-
     for (var i = 0; i < length; i++) {
       $suggestions.appendChild(
         generateDomTree('li', {}, [
@@ -219,7 +201,6 @@ function renderSuggestions(object) {
 
 function renderBookmarks(array) {
   $featuredGames.replaceChildren();
-
   if (!array.length) {
     $featuredGames.appendChild(
       generateDomTree('div', { class: 'col-100 text-center' }, [
@@ -254,7 +235,6 @@ function toggleModal(event) {
   $suggestions.replaceChildren();
   $input.value = null;
   $suggestionsView.classList.add('hidden');
-
   if (!modalOn) {
     modalOn = !modalOn;
     $searchView.classList.remove('hidden');
@@ -266,7 +246,6 @@ function toggleModal(event) {
 
 function goToPreviousView() {
   $featuredGames.replaceChildren();
-
   if (previousView === 'featured' || previousView === currentView) {
     goToFeatured();
   } else if (previousView === 'detail') {
@@ -289,17 +268,14 @@ function goToFeatured() {
   $pageNumBottom.classList.remove('hidden');
   $featuredView.classList.add('hidden');
   $detailView.classList.add('hidden');
-
   if (currentView === 'detail' || currentView === 'bookmarks') {
     $pageLabel.classList.remove('hidden');
   }
-
   if (pageNumFeatured === 1) {
     $backButton.classList.add('hidden');
   } else {
     $backButton.classList.remove('hidden');
   }
-
   if (nextPageUrl === null) {
     $nextButton.classList.add('hidden');
   } else {
@@ -309,18 +285,15 @@ function goToFeatured() {
 
 function goToDetail() {
   window.scrollTo({ top: 0, behavior: 'instant' });
-
   if (currentView === 'bookmarks') {
     previousView = 'bookmarks';
     parentView = 'bookmarks';
   } else {
     previousView = currentView;
   }
-
   if (parentView === 'bookmarks') {
     previousView = 'bookmarks';
   }
-
   currentView = 'detail';
   $backLinkView.classList.remove('hidden');
   $featuredView.classList.add('hidden');
@@ -351,13 +324,11 @@ function goToResults() {
   $featuredView.classList.add('hidden');
   $detailView.classList.add('hidden');
   $searchView.classList.add('hidden');
-
   if (pageNumResults === 1) {
     $backButton.classList.add('hidden');
   } else {
     $backButton.classList.remove('hidden');
   }
-
   if (nextPageUrl === null) {
     $nextButton.classList.add('hidden');
   } else {
@@ -381,7 +352,6 @@ $bookmarkAction.addEventListener('click', function (event) {
   var index = data.bookmarks.findIndex(function (object) {
     return object.slug === data.currentDetail.slug;
   });
-
   if (index === -1) {
     $bookmarkAction.className = 'bookmark-action fas fa-bookmark';
     data.bookmarks.push(data.currentDetail);
@@ -397,7 +367,6 @@ $input.addEventListener('keyup', function (event) {
   } else {
     $suggestionsView.classList.add('hidden');
   }
-
   timeoutId = setTimeout(function () {
     getData(domain + key + searchParam + $input.value, renderSuggestions);
   }, 500);
@@ -428,7 +397,6 @@ $backButton.addEventListener('click', function (event) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
   $nextButton.classList.remove('hidden');
   $featuredView.classList.add('hidden');
-
   if (currentView === 'featured') {
     pageNumFeatured--;
     $pageNumTop.textContent = pageNumFeatured;
@@ -438,7 +406,6 @@ $backButton.addEventListener('click', function (event) {
     $pageNumTop.textContent = pageNumResults;
     $pageNumBottom.textContent = pageNumResults;
   }
-
   if ((currentView === 'featured' && pageNumFeatured === 1) ||
     (currentView === 'results' && pageNumResults === 1)) {
     $backButton.classList.add('hidden');
@@ -450,7 +417,6 @@ $nextButton.addEventListener('click', function (event) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
   $backButton.classList.remove('hidden');
   $featuredView.classList.add('hidden');
-
   if (currentView === 'featured') {
     pageNumFeatured++;
     $pageNumTop.textContent = pageNumFeatured;
@@ -460,7 +426,6 @@ $nextButton.addEventListener('click', function (event) {
     $pageNumTop.textContent = pageNumResults;
     $pageNumBottom.textContent = pageNumResults;
   }
-
   if (nextPageUrl === null) {
     $nextButton.classList.add('hidden');
   }
